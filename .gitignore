@@ -18,13 +18,11 @@
 *api-key*
 
 # Local/generated website link configuration
-env.js
 links*.json
 links*.js
 local-links.*
 Website/.env
 Website/.env.*
-Website/env.js
 Website/links*.json
 Website/links*.js
 Website/local-links.*
