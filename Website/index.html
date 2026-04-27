@@ -9,10 +9,9 @@
   <meta property="og:description" content="A 10-week open course on GeoAI, remote sensing, disaster data, and AI-enabled flood and damage assessment." />
   <meta property="og:type" content="website" />
   <title>GeoAI for Disaster Management | Urban Digital Twin Lab</title>
-
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap" />
 
   <script>
     (function() {
@@ -83,7 +82,7 @@
     }
 
     a { color: inherit; }
-    .container { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; }
+    .container { width: min(1400px, calc(100% - 3rem)); margin: 0 auto; }
 
     .skip-link {
       position: absolute;
@@ -120,21 +119,10 @@
       gap: .75rem;
       text-decoration: none;
     }
-    .brand-mark {
-      width: 42px;
-      height: 42px;
-      border-radius: 14px;
-      display: grid;
-      place-items: center;
-      background: linear-gradient(135deg, var(--navy), var(--blue));
-      color: var(--gold);
-      font-weight: 800;
-      box-shadow: 0 8px 24px rgba(11,31,58,.18);
-    }
     .brand-title {
       font-weight: 800;
       color: var(--navy);
-      letter-spacing: -.02em;
+      letter-spacing: 0;
     }
     .brand-sub {
       display: block;
@@ -144,10 +132,42 @@
       letter-spacing: .08em;
       text-transform: uppercase;
     }
+    .brand-sub a,
+    .inline-link,
+    .citation-box a {
+      color: inherit;
+      text-decoration: none;
+      font-weight: inherit;
+    }
+    .brand-sub a:hover,
+    .inline-link:hover,
+    .citation-box a:hover {
+      color: var(--blue);
+      text-decoration: underline;
+    }
+    .brand-logos {
+      display: flex;
+      align-items: center;
+      gap: .65rem;
+      margin-left: .75rem;
+      padding-left: .75rem;
+      border-left: 1px solid var(--border);
+    }
+    .brand-logos img {
+      display: block;
+      height: 46px;
+      max-width: 220px;
+      object-fit: contain;
+    }
+    .brand-logos .logo-ucf { height: 46px; }
+    .brand-logos .logo-smc {
+      height: 38px;
+      max-width: 210px;
+    }
     .nav-links {
       display: flex;
       align-items: center;
-      gap: 1rem;
+      gap: .85rem;
       font-size: .9rem;
       font-weight: 600;
       color: #334155;
@@ -236,10 +256,9 @@
       margin-bottom: 1.15rem;
     }
     .hero h1 {
-      font-family: "Lora", serif;
-      font-size: clamp(2.55rem, 5.6vw, 5rem);
-      line-height: 1.02;
-      letter-spacing: -.04em;
+      font-size: clamp(2.4rem, 5vw, 4.35rem);
+      line-height: 1.08;
+      letter-spacing: 0;
       max-width: 780px;
       margin-bottom: 1.2rem;
     }
@@ -290,7 +309,6 @@
       padding: 1.35rem;
     }
     .panel-title {
-      font-family: "Lora", serif;
       color: var(--navy);
       font-size: 1.25rem;
       font-weight: 700;
@@ -339,11 +357,10 @@
       margin-bottom: .45rem;
     }
     h2 {
-      font-family: "Lora", serif;
       color: var(--navy);
-      font-size: clamp(1.8rem, 3vw, 2.55rem);
-      line-height: 1.15;
-      letter-spacing: -.025em;
+      font-size: clamp(1.65rem, 2.5vw, 2.25rem);
+      line-height: 1.2;
+      letter-spacing: 0;
     }
     .section-sub {
       color: var(--muted);
@@ -368,7 +385,6 @@
       box-shadow: var(--shadow);
     }
     .stat-number {
-      font-family: "Lora", serif;
       font-size: 2rem;
       color: var(--navy);
       font-weight: 700;
@@ -448,7 +464,6 @@
       margin-bottom: .85rem;
     }
     .survey-card h3, .research-card h3 {
-      font-family: "Lora", serif;
       color: var(--navy);
       font-size: 1.35rem;
       margin-bottom: .45rem;
@@ -619,7 +634,6 @@
       align-items: center;
     }
     .ov-stat-n {
-      font-family: "Lora", serif;
       font-size: 2rem;
       color: var(--navy);
       font-weight: 700;
@@ -839,7 +853,7 @@
       border: 1px solid var(--border);
       border-radius: 10px;
       padding: .6rem .8rem;
-      font-family: "Inter", sans-serif;
+      font-family: "Inter", system-ui, sans-serif;
       font-size: .83rem;
       color: var(--text);
       resize: vertical;
@@ -911,6 +925,7 @@
     @media (max-width: 860px) {
       .nav { align-items: flex-start; padding: .75rem 0; }
       .nav-links { display: none; }
+      .brand-logos { display: none; }
       .hero-grid, .callout { grid-template-columns: 1fr; }
       .resources-layout { grid-template-columns: 1fr; }
       .stats, .cards, .timeline { grid-template-columns: 1fr 1fr; }
@@ -936,22 +951,26 @@
 
   <header>
     <div class="container nav">
-      <a class="brand" href="#">
-        <span class="brand-mark">GA</span>
+      <div class="brand">
         <span>
           <span class="brand-title">GeoAI for Disaster Management</span>
-          <span class="brand-sub">Urban Digital Twin Lab</span>
+          <span class="brand-sub"><a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab</a></span>
         </span>
-        <div style="display:flex; align-items:center; gap:10px; margin-left:15px;">
-            <img src="assets/ucf_logo.png" alt="UCF Logo" style="height:28px;">
-            <img src="assets/ieee_smc_logo.png" alt="IEEE SMC Logo" style="height:28px;">
+        <div class="brand-logos">
+          <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">
+            <img class="logo-ucf" src="../assets/UCF_logo.png" alt="UCF Logo">
+          </a>
+          <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">
+            <img class="logo-smc" src="../assets/ieee_smc_mark.svg" alt="IEEE SMC Logo">
+          </a>
         </div>
-      </a>
+      </div>
       <nav class="nav-links" aria-label="Primary navigation">
         <a href="#overview">Overview</a>
         <a href="#surveys">Surveys</a>
         <a href="#curriculum">Curriculum</a>
         <a href="#progress">My Progress</a>
+        <a href="#resources">Cite</a>
         <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
@@ -968,7 +987,7 @@
             remote sensing, urban damage assessment, and disaster-response decision support.
           </p>
           <p class="hero-affiliation">
-            Developed at University of Central Florida · Supported by IEEE SMC initiatives
+            Developed at <a class="inline-link" href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">University of Central Florida</a> · Supported by <a class="inline-link" href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">IEEE SMC initiatives</a>
           </p>
 
           <div class="hero-actions">
@@ -1321,7 +1340,7 @@
           <h3>Cite this Course</h3>
           <div class="citation-box">
             <code id="citationText">
-              Sabri, S., and Balijepalli, P. R. B., GeoAI for Disaster Management, Urban Digital Twin Lab, University of Central Florida, 2026.
+              <a href="https://scholar.google.com/citations?user=Mt0UxCsAAAAJ" target="_blank" rel="noopener noreferrer">Sabri, S.</a>, and <a href="https://phani-raja-bharath.github.io/portfolio-site/" target="_blank" rel="noopener noreferrer">Balijepalli, P. R. B.</a>, GeoAI for Disaster Management, <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab, University of Central Florida</a>, 2026.
             </code>
           </div>
           <button class="btn btn-navy" type="button" onclick="copyCitation()">Copy Citation</button>
@@ -1378,15 +1397,15 @@
 
       <!-- Logos -->
       <div style="display:flex; gap:30px; align-items:center; flex-wrap:wrap;">
-        <img src="assets/ucf_logo.png" alt="University of Central Florida" style="height:40px;">
-        <img src="assets/ieee_smc_logo.png" alt="IEEE Systems, Man, and Cybernetics Society" style="height:40px;">
+        <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer"><img src="../assets/UCF_logo.png" alt="University of Central Florida" style="height:64px;"></a>
+        <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer"><img src="../assets/ieee_smc_mark.svg" alt="IEEE Systems, Man, and Cybernetics Society" style="height:64px; filter: brightness(0) invert(1);"></a>
       </div>
 
       <!-- Text -->
       <div>
         <strong>GeoAI for Disaster Management</strong><br>
-        Developed under Urban Digital Twin Lab, University of Central Florida<br>
-        In association with IEEE Systems, Man, and Cybernetics Society
+        Developed under <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab, University of Central Florida</a><br>
+        In association with <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">IEEE Systems, Man, and Cybernetics Society</a>
       </div>
 
       <!-- Links -->
