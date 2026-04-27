@@ -1,0 +1,37 @@
+# Environment and local configuration
+.env
+.env.*
+!.env.example
+!.env.sample
+
+# Credentials and secrets
+*.pem
+*.key
+*.p12
+*.pfx
+*.crt
+*.cer
+*credentials*
+*secrets*
+*token*
+*apikey*
+*api-key*
+
+# Local/generated website link configuration
+Website/.env
+Website/.env.*
+Website/env.js
+Website/links*.json
+Website/links*.js
+Website/local-links.*
+
+# Editor and OS noise
+.vscode/settings.json
+.vscode/*.code-workspace
+.DS_Store
+Thumbs.db
+
+# Python/runtime artifacts
+__pycache__/
+*.py[cod]
+.ipynb_checkpoints/
