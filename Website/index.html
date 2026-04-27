@@ -1,0 +1,1577 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="GeoAI for Disaster Management is a 10-week open course introducing geospatial artificial intelligence for flood mapping, disaster response, and urban damage assessment." />
+  <meta name="author" content="Urban Digital Twin Lab" />
+  <meta property="og:title" content="GeoAI for Disaster Management" />
+  <meta property="og:description" content="A 10-week open course on GeoAI, remote sensing, disaster data, and AI-enabled flood and damage assessment." />
+  <meta property="og:type" content="website" />
+  <title>GeoAI for Disaster Management | Urban Digital Twin Lab</title>
+
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" />
+
+  <script>
+    (function() {
+      const FALLBACK = {
+        REPO_URL: "https://github.com/Phani-Raja-Bharath/IEEE_GeoAI_Course",
+        PRE_SURVEY_URL: "https://YOUR_PRE_SURVEY_LINK_HERE",
+        POST_SURVEY_URL: "https://YOUR_POST_SURVEY_LINK_HERE",
+        WEEK_01_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_01/week01_course_setup_and_geoai_intro.ipynb",
+        WEEK_02_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_02/week02_disaster_data_sources_and_visualization.ipynb",
+        WEEK_03_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_03/week03_ml_cv_fundamentals_for_disaster_management.ipynb",
+        WEEK_04_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_04/week04_surface_water_detection_with_segmentation.ipynb",
+        WEEK_05_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_05/week05_vehicle_based_urban_flood_detection.ipynb",
+        WEEK_06_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_06/week06_urban_flood_depth_estimation_pipeline.ipynb",
+        WEEK_07_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_07/week07_model_evaluation_and_error_analysis.ipynb",
+        WEEK_08_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_08/week08_disaster_response_decision_support.ipynb",
+        WEEK_09_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_09/week09_urban_digital_twin_integration.ipynb",
+        WEEK_10_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_10/week10_final_project_template.ipynb"
+      };
+
+      function applyEnvLinks(vars) {
+        document.querySelectorAll('[data-env]').forEach(el => {
+          const value = vars[el.dataset.env];
+          if (!value) return;
+          el.href = value;
+        });
+      }
+
+      function applyWhenReady(vars) {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => applyEnvLinks(vars));
+        } else {
+          applyEnvLinks(vars);
+        }
+      }
+
+      const script = document.createElement('script');
+      script.src = 'env.js';
+      script.onload = () => applyWhenReady(Object.assign({}, FALLBACK, window.__ENV__ || {}));
+      script.onerror = () => applyWhenReady(FALLBACK);
+      document.head.appendChild(script);
+    })();
+  </script>
+
+  <style>
+    :root {
+      --navy: #0b1f3a;
+      --navy-2: #123a66;
+      --blue: #1769aa;
+      --sky: #58a6e7;
+      --gold: #c8a94a;
+      --cream: #fbf7ee;
+      --white: #ffffff;
+      --soft: #f4f8fc;
+      --text: #1e293b;
+      --muted: #64748b;
+      --border: #dbe7f3;
+      --shadow: 0 18px 45px rgba(11, 31, 58, 0.12);
+      --radius: 18px;
+    }
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    html { scroll-behavior: smooth; }
+    body {
+      font-family: "Inter", system-ui, sans-serif;
+      color: var(--text);
+      background: var(--white);
+      line-height: 1.65;
+    }
+
+    a { color: inherit; }
+    .container { width: min(1120px, calc(100% - 2rem)); margin: 0 auto; }
+
+    .skip-link {
+      position: absolute;
+      left: -999px;
+      top: 1rem;
+      background: var(--gold);
+      color: var(--navy);
+      padding: .75rem 1rem;
+      border-radius: 999px;
+      z-index: 999;
+      font-weight: 700;
+    }
+    .skip-link:focus { left: 1rem; }
+
+    /* Header */
+    header {
+      position: sticky;
+      top: 0;
+      z-index: 50;
+      background: rgba(255,255,255,.88);
+      backdrop-filter: blur(14px);
+      border-bottom: 1px solid var(--border);
+    }
+    .nav {
+      min-height: 72px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+    }
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      text-decoration: none;
+    }
+    .brand-mark {
+      width: 42px;
+      height: 42px;
+      border-radius: 14px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--gold);
+      font-weight: 800;
+      box-shadow: 0 8px 24px rgba(11,31,58,.18);
+    }
+    .brand-title {
+      font-weight: 800;
+      color: var(--navy);
+      letter-spacing: -.02em;
+    }
+    .brand-sub {
+      display: block;
+      font-size: .72rem;
+      color: var(--muted);
+      font-weight: 600;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+    }
+    .nav-links {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      font-size: .9rem;
+      font-weight: 600;
+      color: #334155;
+    }
+    .nav-links a {
+      text-decoration: none;
+      padding: .5rem .25rem;
+    }
+    .nav-links a:hover { color: var(--blue); }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: .45rem;
+      text-decoration: none;
+      border: 0;
+      border-radius: 999px;
+      padding: .78rem 1.15rem;
+      font-weight: 800;
+      font-size: .92rem;
+      transition: transform .18s ease, box-shadow .18s ease, background .18s ease;
+      cursor: pointer;
+    }
+    .btn:hover { transform: translateY(-2px); }
+    .btn-primary {
+      background: var(--gold);
+      color: var(--navy);
+      box-shadow: 0 12px 28px rgba(200,169,74,.28);
+    }
+    .btn-primary:hover { background: #d8b75a; }
+    .btn-outline {
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.38);
+      background: rgba(255,255,255,.08);
+    }
+    .btn-outline:hover { background: rgba(255,255,255,.15); }
+    .btn-navy {
+      background: var(--navy);
+      color: var(--white);
+      box-shadow: 0 12px 26px rgba(11,31,58,.22);
+    }
+
+    /* Hero */
+    .hero {
+      position: relative;
+      overflow: hidden;
+      color: var(--white);
+      background:
+        radial-gradient(circle at 18% 20%, rgba(88,166,231,.32), transparent 28%),
+        radial-gradient(circle at 82% 10%, rgba(200,169,74,.20), transparent 24%),
+        linear-gradient(135deg, #08182d 0%, #10345d 54%, #145c96 100%);
+      padding: 6.4rem 0 4.5rem;
+    }
+    .hero::before {
+      content: "";
+      position: absolute;
+      inset: 0;
+      opacity: .14;
+      background-image:
+        linear-gradient(rgba(255,255,255,.12) 1px, transparent 1px),
+        linear-gradient(90deg, rgba(255,255,255,.12) 1px, transparent 1px);
+      background-size: 44px 44px;
+      mask-image: linear-gradient(to bottom, #000, transparent 90%);
+    }
+    .hero-grid {
+      position: relative;
+      display: grid;
+      grid-template-columns: 1.15fr .85fr;
+      gap: 3rem;
+      align-items: center;
+    }
+    .badge {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      border: 1px solid rgba(200,169,74,.42);
+      background: rgba(200,169,74,.15);
+      color: #f2d77b;
+      padding: .38rem .85rem;
+      border-radius: 999px;
+      font-size: .75rem;
+      font-weight: 800;
+      text-transform: uppercase;
+      letter-spacing: .11em;
+      margin-bottom: 1.15rem;
+    }
+    .hero h1 {
+      font-family: "Lora", serif;
+      font-size: clamp(2.55rem, 5.6vw, 5rem);
+      line-height: 1.02;
+      letter-spacing: -.04em;
+      max-width: 780px;
+      margin-bottom: 1.2rem;
+    }
+    .hero-lead {
+      font-size: clamp(1.02rem, 2vw, 1.25rem);
+      color: rgba(255,255,255,.78);
+      max-width: 680px;
+      margin-bottom: 1.8rem;
+    }
+    .hero-actions {
+      display: flex;
+      gap: .9rem;
+      flex-wrap: wrap;
+      margin-bottom: 1.9rem;
+    }
+    .hero-affiliation {
+      margin: 1.9rem 0 1rem;
+      font-size: .9rem;
+      font-weight: 700;
+      color: rgba(255,255,255,.74);
+    }
+    .hero-meta {
+      display: flex;
+      flex-wrap: wrap;
+      gap: .8rem;
+    }
+    .meta-pill {
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.08);
+      color: rgba(255,255,255,.8);
+      padding: .55rem .75rem;
+      border-radius: 999px;
+      font-size: .85rem;
+      font-weight: 700;
+    }
+    .hero-panel {
+      border: 1px solid rgba(255,255,255,.16);
+      background: rgba(255,255,255,.10);
+      border-radius: 28px;
+      padding: 1.3rem;
+      box-shadow: 0 30px 70px rgba(0,0,0,.22);
+      backdrop-filter: blur(14px);
+    }
+    .panel-inner {
+      border-radius: 22px;
+      background: rgba(255,255,255,.95);
+      color: var(--text);
+      padding: 1.35rem;
+    }
+    .panel-title {
+      font-family: "Lora", serif;
+      color: var(--navy);
+      font-size: 1.25rem;
+      font-weight: 700;
+      margin-bottom: .8rem;
+    }
+    .panel-list { display: grid; gap: .75rem; }
+    .panel-item {
+      display: grid;
+      grid-template-columns: 36px 1fr;
+      gap: .75rem;
+      align-items: start;
+      border: 1px solid var(--border);
+      background: var(--soft);
+      padding: .8rem;
+      border-radius: 16px;
+    }
+    .panel-icon {
+      width: 36px;
+      height: 36px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #e7f2fd;
+      color: var(--blue);
+      font-weight: 800;
+    }
+    .panel-item strong { display: block; color: var(--navy); font-size: .9rem; }
+    .panel-item span { display: block; color: var(--muted); font-size: .8rem; line-height: 1.45; }
+
+    /* Sections */
+    section { padding: 4.5rem 0; }
+    section:nth-of-type(even) { background: linear-gradient(180deg, #fff, #f8fbfe); }
+    .section-head {
+      display: flex;
+      align-items: end;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-bottom: 2rem;
+    }
+    .eyebrow {
+      color: var(--blue);
+      font-size: .78rem;
+      font-weight: 900;
+      letter-spacing: .14em;
+      text-transform: uppercase;
+      margin-bottom: .45rem;
+    }
+    h2 {
+      font-family: "Lora", serif;
+      color: var(--navy);
+      font-size: clamp(1.8rem, 3vw, 2.55rem);
+      line-height: 1.15;
+      letter-spacing: -.025em;
+    }
+    .section-sub {
+      color: var(--muted);
+      max-width: 680px;
+      margin-top: .55rem;
+      font-size: 1rem;
+    }
+
+    .stats {
+      display: grid;
+      grid-template-columns: repeat(4, 1fr);
+      gap: 1rem;
+      margin-top: -2rem;
+      position: relative;
+      z-index: 2;
+    }
+    .stat-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.25rem;
+      box-shadow: var(--shadow);
+    }
+    .stat-number {
+      font-family: "Lora", serif;
+      font-size: 2rem;
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .stat-label {
+      color: var(--muted);
+      font-size: .8rem;
+      font-weight: 800;
+      letter-spacing: .08em;
+      text-transform: uppercase;
+      margin-top: .5rem;
+    }
+
+    .cards {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+    }
+    .card {
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+    }
+    .card-icon {
+      width: 44px;
+      height: 44px;
+      border-radius: 16px;
+      display: grid;
+      place-items: center;
+      background: #eaf4ff;
+      margin-bottom: .9rem;
+      font-size: 1.25rem;
+    }
+    .card h3 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: .4rem;
+    }
+    .card p { color: var(--muted); font-size: .9rem; }
+
+    .survey-grid, .research-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .survey-card, .research-card {
+      position: relative;
+      overflow: hidden;
+      min-height: 190px;
+      border-radius: 24px;
+      padding: 1.55rem;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease;
+    }
+    .survey-card:hover, .research-card:hover { transform: translateY(-4px); box-shadow: var(--shadow); }
+    .survey-card:first-child {
+      background: linear-gradient(135deg, #e7f3ff, #cfe8fb);
+      border: 1px solid #b9dbf6;
+    }
+    .survey-card:last-child {
+      background: linear-gradient(135deg, #fff6db, #f6df9a);
+      border: 1px solid #e9cd72;
+    }
+    .tag {
+      display: inline-flex;
+      border-radius: 999px;
+      padding: .28rem .7rem;
+      background: var(--navy);
+      color: var(--white);
+      font-size: .72rem;
+      font-weight: 900;
+      letter-spacing: .09em;
+      text-transform: uppercase;
+      margin-bottom: .85rem;
+    }
+    .survey-card h3, .research-card h3 {
+      font-family: "Lora", serif;
+      color: var(--navy);
+      font-size: 1.35rem;
+      margin-bottom: .45rem;
+    }
+    .survey-card p { color: #526174; font-size: .92rem; max-width: 460px; }
+
+    .timeline {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+    }
+    .week-card {
+      position: relative;
+      display: grid;
+      grid-template-columns: 64px 1fr;
+      gap: 1rem;
+      padding: 1.1rem;
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: 20px;
+      text-decoration: none;
+      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
+    }
+    .week-card:hover {
+      border-color: var(--sky);
+      box-shadow: 0 16px 32px rgba(23,105,170,.12);
+      transform: translateY(-3px);
+    }
+    .week-num {
+      width: 64px;
+      height: 64px;
+      border-radius: 18px;
+      display: grid;
+      place-items: center;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      font-weight: 900;
+      font-size: .9rem;
+    }
+    .week-card h3 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: .25rem;
+    }
+    .week-card p { color: var(--muted); font-size: .88rem; }
+
+    .research-card {
+      background: linear-gradient(135deg, var(--navy), var(--navy-2));
+      color: var(--white);
+      border: 1px solid rgba(255,255,255,.1);
+    }
+    .research-card::after {
+      content: "";
+      position: absolute;
+      width: 180px;
+      height: 180px;
+      right: -55px;
+      bottom: -60px;
+      border-radius: 50%;
+      background: rgba(200,169,74,.18);
+    }
+    .research-card .tag { background: rgba(200,169,74,.18); color: #f2d77b; border: 1px solid rgba(200,169,74,.35); }
+    .research-card h3 { color: var(--white); }
+    .research-card p { color: rgba(255,255,255,.72); max-width: 500px; }
+    .colab {
+      display: inline-flex;
+      align-items: center;
+      gap: .45rem;
+      margin-top: 1rem;
+      color: rgba(255,255,255,.8);
+      font-size: .85rem;
+      font-weight: 800;
+    }
+
+    .resources-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .citation-card,
+    .reference-card {
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+    }
+    .citation-box {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: .92rem;
+      color: var(--text);
+      margin: 1rem 0;
+    }
+    .citation-box code {
+      font-family: "Inter", system-ui, sans-serif;
+      white-space: normal;
+    }
+    .copy-status {
+      display: inline-flex;
+      align-items: center;
+      margin-left: .75rem;
+      color: #166534;
+      font-size: .85rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+    .copy-status.show { opacity: 1; }
+    .reference-card h3 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: .8rem;
+    }
+    .reference-list {
+      display: grid;
+      gap: .8rem;
+      list-style: none;
+    }
+    .reference-list li {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+      padding-left: 1rem;
+      border-left: 3px solid #cfe8fb;
+    }
+    .reference-list strong { color: var(--navy); }
+    .reference-list a {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .reference-list a:hover { text-decoration: underline; }
+
+    .callout {
+      display: grid;
+      grid-template-columns: 1.2fr .8fr;
+      gap: 1.5rem;
+      align-items: center;
+      background:
+        linear-gradient(135deg, rgba(11,31,58,.96), rgba(20,92,150,.96)),
+        radial-gradient(circle at top right, rgba(200,169,74,.35), transparent 25%);
+      color: var(--white);
+      border-radius: 28px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+    }
+    .callout h2 { color: var(--white); }
+    .callout p { color: rgba(255,255,255,.76); margin-top: .6rem; }
+    .callout-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: flex-end; }
+
+    .progress-section {
+      background: var(--soft);
+      padding-top: 5rem;
+    }
+    .overview-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .ov-stat-n {
+      font-family: "Lora", serif;
+      font-size: 2rem;
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .ov-stat-l {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: .3rem;
+    }
+    .ov-bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: .8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: .4rem;
+    }
+    .ov-bar-track {
+      height: 10px;
+      background: var(--soft);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .ov-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--blue), #16a34a);
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+      width: 0%;
+    }
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 99px;
+      padding: .55rem 1rem;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-reset:hover {
+      border-color: #f87171;
+      color: #ef4444;
+    }
+    .resume-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: #e7f3ff;
+      border: 1px solid #b9dbf6;
+      border-radius: 14px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .resume-banner span {
+      font-size: .9rem;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .btn-resume {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      padding: .5rem 1.1rem;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .complete-banner {
+      display: none;
+      background: linear-gradient(135deg, #052e16, #166534);
+      color: #fff;
+      border-radius: 20px;
+      padding: 1.8rem 2rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .complete-banner.visible { display: block; }
+    .complete-banner h2 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: .4rem;
+    }
+    .complete-banner p {
+      color: rgba(255,255,255,.75);
+      font-size: .9rem;
+      margin-bottom: 1rem;
+    }
+    .btn-cert {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 99px;
+      padding: .75rem 1.6rem;
+      font-size: .9rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .progress-weeks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .progress-section .week-card {
+      display: block;
+      padding: 1.3rem 1.4rem;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      text-decoration: none;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .progress-section .week-card.done {
+      border-color: #86efac;
+      background: linear-gradient(135deg, #f0fdf4, #fff);
+    }
+    .progress-section .week-card:hover {
+      box-shadow: 0 8px 24px rgba(11,31,58,.09);
+      transform: none;
+    }
+    .wk-header {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      margin-bottom: .9rem;
+    }
+    .wk-num-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      font-weight: 900;
+      font-size: .82rem;
+      display: grid;
+      place-items: center;
+    }
+    .progress-section .week-card.done .wk-num-box {
+      background: linear-gradient(135deg, #166534, #16a34a);
+    }
+    .wk-title { flex: 1; }
+    .wk-title h3 {
+      font-size: .98rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: .15rem;
+    }
+    .wk-title p {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .wk-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      font-size: 13px;
+    }
+    .progress-section .week-card.done .wk-check {
+      border-color: #16a34a;
+      background: #16a34a;
+      color: #fff;
+    }
+    .wk-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      margin-bottom: .8rem;
+      padding: .3rem .7rem;
+      border-radius: 99px;
+      border: 1px solid #b9dbf6;
+      background: #e7f3ff;
+      transition: background .15s;
+    }
+    .wk-link:hover { background: #cfe8fb; }
+    .wk-link img {
+      height: 16px;
+      vertical-align: middle;
+    }
+    .notes-label {
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: .35rem;
+    }
+    .notes-box {
+      width: 100%;
+      min-height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem .8rem;
+      font-family: "Inter", sans-serif;
+      font-size: .83rem;
+      color: var(--text);
+      resize: vertical;
+      background: var(--soft);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .notes-box:focus {
+      border-color: var(--sky);
+      background: #fff;
+    }
+    .complete-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-top: .9rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border);
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: .55rem;
+      border-radius: 10px;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--soft);
+      color: var(--muted);
+      text-align: center;
+      transition: all .18s;
+    }
+    .toggle-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #e7f3ff;
+    }
+    .progress-section .week-card.done .toggle-btn {
+      border-color: #86efac;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .saved-indicator {
+      font-size: .72rem;
+      color: #16a34a;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .saved-indicator.error { color: #dc2626; }
+    .saved-indicator.show { opacity: 1; }
+
+    footer {
+      border-top: 1px solid var(--border);
+      background: #071426;
+      color: rgba(255,255,255,.72);
+      padding: 2.6rem 0;
+      font-size: .88rem;
+    }
+    .footer-grid {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+    footer strong { color: var(--white); }
+    footer a { color: #9bd2ff; text-decoration: none; }
+
+    @media (max-width: 860px) {
+      .nav { align-items: flex-start; padding: .75rem 0; }
+      .nav-links { display: none; }
+      .hero-grid, .callout { grid-template-columns: 1fr; }
+      .resources-layout { grid-template-columns: 1fr; }
+      .stats, .cards, .timeline { grid-template-columns: 1fr 1fr; }
+      .callout-actions { justify-content: flex-start; }
+      .overview-card { grid-template-columns: 1fr 1fr; }
+      .progress-weeks-grid { grid-template-columns: 1fr; }
+    }
+    @media (max-width: 620px) {
+      .hero { padding-top: 4.5rem; }
+      .hero-actions, .hero-meta { flex-direction: column; align-items: stretch; }
+      .btn { width: 100%; }
+      .stats, .cards, .survey-grid, .research-grid, .timeline { grid-template-columns: 1fr; }
+      .section-head { display: block; }
+      .week-card { grid-template-columns: 52px 1fr; }
+      .week-num { width: 52px; height: 52px; border-radius: 16px; }
+      .overview-card { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+
+<body>
+  <a class="skip-link" href="#main">Skip to main content</a>
+
+  <header>
+    <div class="container nav">
+      <a class="brand" href="#">
+        <span class="brand-mark">GA</span>
+        <span>
+          <span class="brand-title">GeoAI for Disaster Management</span>
+          <span class="brand-sub">Urban Digital Twin Lab</span>
+        </span>
+        <div style="display:flex; align-items:center; gap:10px; margin-left:15px;">
+            <img src="assets/ucf_logo.png" alt="UCF Logo" style="height:28px;">
+            <img src="assets/ieee_smc_logo.png" alt="IEEE SMC Logo" style="height:28px;">
+        </div>
+      </a>
+      <nav class="nav-links" aria-label="Primary navigation">
+        <a href="#overview">Overview</a>
+        <a href="#surveys">Surveys</a>
+        <a href="#curriculum">Curriculum</a>
+        <a href="#progress">My Progress</a>
+        <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">GitHub</a>
+      </nav>
+    </div>
+  </header>
+
+  <main id="main">
+    <section class="hero" aria-labelledby="course-title">
+      <div class="container hero-grid">
+        <div>
+          <div class="badge">10-Week Open Course</div>
+          <h1 id="course-title">GeoAI for Disaster Management</h1>
+          <p class="hero-lead">
+            A publication-grade learning pathway for applying geospatial artificial intelligence to flood mapping,
+            remote sensing, urban damage assessment, and disaster-response decision support.
+          </p>
+          <p class="hero-affiliation">
+            Developed at University of Central Florida · Supported by IEEE SMC initiatives
+          </p>
+
+          <div class="hero-actions">
+            <a href="#curriculum" class="btn btn-primary">Start the Course</a>
+            <a href="#progress" class="btn btn-outline">Track Progress</a>
+            <a href="#surveys" class="btn btn-outline">Take Pre-Course Survey</a>
+          </div>
+
+          <div class="hero-meta" aria-label="Course highlights">
+            <span class="meta-pill">Python + Google Colab</span>
+            <span class="meta-pill">Remote Sensing</span>
+            <span class="meta-pill">Flood Intelligence</span>
+            <span class="meta-pill">Open Educational Resource</span>
+          </div>
+        </div>
+
+        <aside class="hero-panel" aria-label="Course summary">
+          <div class="panel-inner">
+            <div class="panel-title">Course at a Glance</div>
+            <div class="panel-list">
+              <div class="panel-item">
+                <div class="panel-icon">01</div>
+                <div><strong>Foundations</strong><span>Geospatial data, Python workflows, and remote sensing basics.</span></div>
+              </div>
+              <div class="panel-item">
+                <div class="panel-icon">02</div>
+                <div><strong>AI Methods</strong><span>Classical machine learning, deep learning, and semantic segmentation.</span></div>
+              </div>
+              <div class="panel-item">
+                <div class="panel-icon">03</div>
+                <div><strong>Applications</strong><span>Flood mapping, urban damage assessment, and research-ready pipelines.</span></div>
+              </div>
+            </div>
+          </div>
+        </aside>
+      </div>
+    </section>
+
+    <div class="container stats" aria-label="Course statistics">
+      <div class="stat-card"><div class="stat-number">10</div><div class="stat-label">Weeks</div></div>
+      <div class="stat-card"><div class="stat-number">10</div><div class="stat-label">Notebooks</div></div>
+      <div class="stat-card"><div class="stat-number">2</div><div class="stat-label">Research Pipelines</div></div>
+      <div class="stat-card"><div class="stat-number">Free</div><div class="stat-label">Open Access</div></div>
+    </div>
+
+    <section id="overview">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">About the Course</div>
+            <h2>Designed for learning, research, and real-world disaster intelligence.</h2>
+            <p class="section-sub">
+              The course moves from core geospatial concepts to deployable AI workflows that support hazard detection,
+              impact analysis, and decision-ready visualization.
+            </p>
+          </div>
+        </div>
+
+        <div class="cards">
+          <article class="card">
+            <div class="card-icon">🛰️</div>
+            <h3>Remote Sensing Fundamentals</h3>
+            <p>Work with raster data, multispectral imagery, SAR concepts, and preprocessing pipelines.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🤖</div>
+            <h3>Machine Learning for GeoAI</h3>
+            <p>Build supervised classification and deep learning workflows for geospatial intelligence.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🌊</div>
+            <h3>Flood & Surface Water Mapping</h3>
+            <p>Use satellite and terrain data to map flood extent and support emergency assessment.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🏙️</div>
+            <h3>Urban Damage Assessment</h3>
+            <p>Analyze buildings, infrastructure exposure, and flood-depth proxies in urban environments.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">📊</div>
+            <h3>Reproducible Pipelines</h3>
+            <p>Convert raw open data into interpretable maps, metrics, and course-ready notebooks.</p>
+          </article>
+          <article class="card">
+            <div class="card-icon">🌍</div>
+            <h3>Open Data Ecosystem</h3>
+            <p>Use Sentinel, OpenStreetMap, DEMs, and disaster datasets in accessible workflows.</p>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="surveys">
+      <div class="container">
+        <div class="eyebrow">Learning Evaluation</div>
+        <h2>Before and after course surveys</h2>
+        <p class="section-sub">
+          These surveys support course improvement and help measure changes in learner confidence, background knowledge,
+          and readiness to apply GeoAI methods.
+        </p>
+
+        <div class="survey-grid" style="margin-top: 2rem;">
+          <a data-env="PRE_SURVEY_URL" target="_blank" rel="noopener noreferrer" class="survey-card">
+            <span class="tag">Pre-Course</span>
+            <h3>Before You Begin</h3>
+            <p>Tell us about your background, expectations, and starting confidence. Estimated time: 5 minutes.</p>
+          </a>
+          <a data-env="POST_SURVEY_URL" target="_blank" rel="noopener noreferrer" class="survey-card">
+            <span class="tag">Post-Course</span>
+            <h3>After Completion</h3>
+            <p>Reflect on what you learned, what improved, and how the course can be strengthened.</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="curriculum">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Curriculum</div>
+            <h2>Weekly notebook pathway</h2>
+            <p class="section-sub">
+              Each week is structured as a self-contained notebook with learning objectives, guided examples,
+              exercises, and extension activities.
+            </p>
+          </div>
+          <a class="btn btn-navy" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer">Open Week 01 Notebook</a>
+        </div>
+
+        <div class="timeline">
+          <a class="week-card" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W01</div><div><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_02_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W02</div><div><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_03_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W03</div><div><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_04_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W04</div><div><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_05_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W05</div><div><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_06_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W06</div><div><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_07_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W07</div><div><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_08_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W08</div><div><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_09_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W09</div><div><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p></div>
+          </a>
+          <a class="week-card" data-env="WEEK_10_URL" target="_blank" rel="noopener noreferrer">
+            <div class="week-num">W10</div><div><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p></div>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <section id="progress" class="progress-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">My Progress</div>
+            <h2>Track weekly completion and reflections.</h2>
+            <p class="section-sub">
+              Mark each week complete after adding at least two words of reflection. Your notes and progress are saved locally in this browser.
+            </p>
+          </div>
+        </div>
+
+        <div class="resume-banner" id="resumeBanner">
+          <span id="resumeText">Resume from where you left off</span>
+          <button class="btn-resume" type="button" onclick="resumeCourse()">Jump to Week</button>
+        </div>
+
+        <div class="overview-card">
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="countDone">0</div>
+            <div class="ov-stat-l">Weeks Completed</div>
+          </div>
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="countLeft">10</div>
+            <div class="ov-stat-l">Weeks Remaining</div>
+          </div>
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="pctDone">0%</div>
+            <div class="ov-stat-l">Overall Progress</div>
+          </div>
+          <button class="btn-reset" type="button" onclick="resetAll()">Reset Progress</button>
+          <div style="grid-column: 1 / -1;">
+            <div class="ov-bar-label">
+              <span>Progress</span>
+              <span id="barLabel">0 of 10 weeks</span>
+            </div>
+            <div class="ov-bar-track"><div class="ov-bar-fill" id="barFill"></div></div>
+          </div>
+        </div>
+
+        <div class="complete-banner" id="completeBanner">
+          <h2>Course Complete</h2>
+          <p>You have finished all 10 weeks of GeoAI for Disaster Management.</p>
+          <a href="#surveys" class="btn-cert">Take Post-Course Survey</a>
+        </div>
+
+        <div class="progress-weeks-grid" id="weeksGrid">
+          <article class="week-card" id="card-1">
+            <div class="wk-header">
+              <div class="wk-num-box">W01</div>
+              <div class="wk-title"><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p></div>
+              <div class="wk-check" onclick="toggleWeek(1)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-1" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(1)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(1)" id="toggle-1">Mark as Complete</div><span class="saved-indicator" id="saved-1">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-2">
+            <div class="wk-header">
+              <div class="wk-num-box">W02</div>
+              <div class="wk-title"><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(2)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_02_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-2" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(2)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(2)" id="toggle-2">Mark as Complete</div><span class="saved-indicator" id="saved-2">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-3">
+            <div class="wk-header">
+              <div class="wk-num-box">W03</div>
+              <div class="wk-title"><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p></div>
+              <div class="wk-check" onclick="toggleWeek(3)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_03_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-3" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(3)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(3)" id="toggle-3">Mark as Complete</div><span class="saved-indicator" id="saved-3">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-4">
+            <div class="wk-header">
+              <div class="wk-num-box">W04</div>
+              <div class="wk-title"><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p></div>
+              <div class="wk-check" onclick="toggleWeek(4)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_04_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-4" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(4)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(4)" id="toggle-4">Mark as Complete</div><span class="saved-indicator" id="saved-4">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-5">
+            <div class="wk-header">
+              <div class="wk-num-box">W05</div>
+              <div class="wk-title"><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p></div>
+              <div class="wk-check" onclick="toggleWeek(5)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_05_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-5" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(5)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(5)" id="toggle-5">Mark as Complete</div><span class="saved-indicator" id="saved-5">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-6">
+            <div class="wk-header">
+              <div class="wk-num-box">W06</div>
+              <div class="wk-title"><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p></div>
+              <div class="wk-check" onclick="toggleWeek(6)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_06_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-6" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(6)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(6)" id="toggle-6">Mark as Complete</div><span class="saved-indicator" id="saved-6">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-7">
+            <div class="wk-header">
+              <div class="wk-num-box">W07</div>
+              <div class="wk-title"><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(7)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_07_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-7" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(7)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(7)" id="toggle-7">Mark as Complete</div><span class="saved-indicator" id="saved-7">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-8">
+            <div class="wk-header">
+              <div class="wk-num-box">W08</div>
+              <div class="wk-title"><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(8)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_08_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-8" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(8)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(8)" id="toggle-8">Mark as Complete</div><span class="saved-indicator" id="saved-8">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-9">
+            <div class="wk-header">
+              <div class="wk-num-box">W09</div>
+              <div class="wk-title"><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p></div>
+              <div class="wk-check" onclick="toggleWeek(9)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_09_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-9" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(9)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(9)" id="toggle-9">Mark as Complete</div><span class="saved-indicator" id="saved-9">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-10">
+            <div class="wk-header">
+              <div class="wk-num-box">W10</div>
+              <div class="wk-title"><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p></div>
+              <div class="wk-check" onclick="toggleWeek(10)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_10_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-10" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(10)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(10)" id="toggle-10">Mark as Complete</div><span class="saved-indicator" id="saved-10">Saved ✓</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section id="resources">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Course Resources</div>
+            <h2>Cite this course and continue reading.</h2>
+            <p class="section-sub">
+              Use the course citation for reports, presentations, and projects. The references below support the course themes in GeoAI, remote sensing, disaster analytics, and digital twins.
+            </p>
+          </div>
+        </div>
+
+        <div class="citation-card" style="margin-bottom:1.2rem;">
+          <h3>Cite this Course</h3>
+          <div class="citation-box">
+            <code id="citationText">
+              Sabri, S., and Balijepalli, P. R. B., GeoAI for Disaster Management, Urban Digital Twin Lab, University of Central Florida, 2026.
+            </code>
+          </div>
+          <button class="btn btn-navy" type="button" onclick="copyCitation()">Copy Citation</button>
+          <span class="copy-status" id="copyStatus" aria-live="polite">Citation copied</span>
+        </div>
+
+        <div class="resources-layout">
+          <article class="reference-card">
+            <h3>Course References</h3>
+            <ul class="reference-list">
+              <li><strong>xyz. (2007).</strong> zzzzz. <em>GeoJournal</em>.</li>
+              <!-- <li><strong>Zhu, X. X., et al. (2017).</strong> Deep learning in remote sensing: a comprehensive review and list of resources. <em>IEEE Geoscience and Remote Sensing Magazine</em>.</li>
+              <li><strong>Reichstein, M., et al. (2019).</strong> Deep learning and process understanding for data-driven Earth system science. <em>Nature</em>.</li>
+              <li><strong>Janowicz, K., et al. (2020).</strong> GeoAI: spatially explicit artificial intelligence techniques for geographic knowledge discovery and beyond. <em>International Journal of Geographical Information Science</em>.</li> -->
+            </ul>
+          </article>
+
+          <article class="reference-card">
+            <h3>Further Reading</h3>
+            <ul class="reference-list">
+              <!-- <li><a href="https://www.undrr.org/" target="_blank" rel="noopener noreferrer">UNDRR</a>: disaster risk reduction terminology, frameworks, and Sendai Framework resources.</li>
+              <li><a href="https://www.earthdata.nasa.gov/learn/trainings" target="_blank" rel="noopener noreferrer">NASA Earthdata Training</a>: applied remote sensing and Earth observation tutorials.</li>
+              <li><a href="https://emergency.copernicus.eu/" target="_blank" rel="noopener noreferrer">Copernicus Emergency Management Service</a>: rapid mapping and disaster-monitoring products.</li> -->
+              <li><a href="https://www.fema.gov/emergency-managers/practitioners/hazus" target="_blank" rel="noopener noreferrer">FEMA Hazus</a>: risk assessment methods and tools for natural hazards.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="container">
+        <div class="callout">
+          <div>
+            <div class="eyebrow" style="color:#f2d77b;">Open Educational Resource</div>
+            <h2>Built for learners, researchers, and disaster-response innovators.</h2>
+            <p>
+              The course can support classroom instruction, self-paced learning, lab onboarding, and future publication
+              or workshop dissemination.
+            </p>
+          </div>
+          <div class="callout-actions">
+            <a href="#curriculum" class="btn btn-primary">Explore Modules</a>
+            <a href="#progress" class="btn btn-outline">Track Progress</a>
+            <a data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Open Week 01 Notebook</a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer>
+    <div class="container" style="display:flex; flex-direction:column; gap:20px; align-items:center; text-align:center;">
+
+      <!-- Logos -->
+      <div style="display:flex; gap:30px; align-items:center; flex-wrap:wrap;">
+        <img src="assets/ucf_logo.png" alt="University of Central Florida" style="height:40px;">
+        <img src="assets/ieee_smc_logo.png" alt="IEEE Systems, Man, and Cybernetics Society" style="height:40px;">
+      </div>
+
+      <!-- Text -->
+      <div>
+        <strong>GeoAI for Disaster Management</strong><br>
+        Developed under Urban Digital Twin Lab, University of Central Florida<br>
+        In association with IEEE Systems, Man, and Cybernetics Society
+      </div>
+
+      <!-- Links -->
+      <div>
+        <a href="#curriculum">
+          Course Notebooks
+        </a>
+        ·
+        <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">
+          GitHub Repository
+        </a>
+      </div>
+
+    </div>
+  </footer>
+  <script>
+    const STORAGE_KEY = 'geoai_progress';
+    const TOTAL_WEEKS = 10;
+    const MIN_REFLECTION_WORDS = 2;
+    let firstIncompleteWeek = null;
+
+    function loadData() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function copyCitation() {
+      const citation = document.getElementById('citationText');
+      const status = document.getElementById('copyStatus');
+      const text = citation ? citation.innerText.trim().replace(/\s+/g, ' ') : '';
+      if (!text) return;
+
+      function showCopied() {
+        if (!status) return;
+        status.classList.add('show');
+        clearTimeout(status._t);
+        status._t = setTimeout(() => status.classList.remove('show'), 1800);
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+          window.prompt('Copy this citation:', text);
+        });
+      } else {
+        window.prompt('Copy this citation:', text);
+      }
+    }
+
+    function toggleWeek(n) {
+      const data = loadData();
+      const notesEl = document.getElementById('notes-' + n);
+      const notes = notesEl.value.trim();
+      data['week_' + n] = data['week_' + n] || {};
+
+      if (!data['week_' + n].done && countWords(notes) < MIN_REFLECTION_WORDS) {
+        notesEl.focus();
+        flashSaved(n, 'Add at least 2 words first', true);
+        return;
+      }
+
+      data['week_' + n].notes = notesEl.value;
+      data['week_' + n].done = !data['week_' + n].done;
+      const completed = data['week_' + n].done;
+      saveData(data);
+      renderCard(n, data['week_' + n]);
+      updateOverview(data);
+      flashSaved(n, 'Saved ✓');
+
+      if (completed && n < TOTAL_WEEKS) {
+        setTimeout(() => {
+          const next = document.getElementById('card-' + (n + 1));
+          if (next) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 400);
+      }
+    }
+
+    function saveNotes(n) {
+      const data = loadData();
+      data['week_' + n] = data['week_' + n] || {};
+      data['week_' + n].notes = document.getElementById('notes-' + n).value;
+      if (countWords(data['week_' + n].notes) < MIN_REFLECTION_WORDS && data['week_' + n].done) {
+        data['week_' + n].done = false;
+        renderCard(n, data['week_' + n]);
+        updateOverview(data);
+        flashSaved(n, 'Minimum 2 words', true);
+      } else {
+        flashSaved(n, 'Saved ✓');
+      }
+      saveData(data);
+    }
+
+    function countWords(value) {
+      return value.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function flashSaved(n, message = 'Saved ✓', isError = false) {
+      const el = document.getElementById('saved-' + n);
+      el.textContent = message;
+      el.classList.toggle('error', isError);
+      el.classList.add('show');
+      clearTimeout(el._t);
+      el._t = setTimeout(() => {
+        el.classList.remove('show');
+        el.classList.remove('error');
+      }, 1800);
+    }
+
+    function renderCard(n, weekData) {
+      const card = document.getElementById('card-' + n);
+      const toggle = document.getElementById('toggle-' + n);
+      const notes = document.getElementById('notes-' + n);
+      const done = weekData && weekData.done;
+      if (done) {
+        card.classList.add('done');
+        toggle.textContent = '✓ Completed';
+      } else {
+        card.classList.remove('done');
+        toggle.textContent = 'Mark as Complete';
+      }
+      notes.value = weekData && weekData.notes ? weekData.notes : '';
+    }
+
+    function updateOverview(data) {
+      const done = Object.values(data).filter(w => w && w.done).length;
+      const pct = Math.round((done / TOTAL_WEEKS) * 100);
+      document.getElementById('countDone').textContent = done;
+      document.getElementById('countLeft').textContent = TOTAL_WEEKS - done;
+      document.getElementById('pctDone').textContent = pct + '%';
+      document.getElementById('barFill').style.width = pct + '%';
+      document.getElementById('barLabel').textContent = done + ' of ' + TOTAL_WEEKS + ' weeks';
+      document.getElementById('completeBanner').classList.toggle('visible', done === TOTAL_WEEKS);
+      updateResumeBanner(data, done);
+    }
+
+    function updateResumeBanner(data, done) {
+      const banner = document.getElementById('resumeBanner');
+      if (!banner || done === 0 || done === TOTAL_WEEKS) {
+        if (banner) banner.style.display = 'none';
+        firstIncompleteWeek = null;
+        return;
+      }
+
+      firstIncompleteWeek = null;
+      for (let n = 1; n <= TOTAL_WEEKS; n++) {
+        if (!data['week_' + n] || !data['week_' + n].done) {
+          firstIncompleteWeek = n;
+          break;
+        }
+      }
+
+      if (firstIncompleteWeek) {
+        document.getElementById('resumeText').textContent = 'Continue from Week ' + firstIncompleteWeek;
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    function resumeCourse() {
+      if (!firstIncompleteWeek) return;
+      const el = document.getElementById('card-' + firstIncompleteWeek);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetAll() {
+      if (!confirm('Reset all progress and notes? This cannot be undone.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, {});
+      updateOverview({});
+      const banner = document.getElementById('resumeBanner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    (function initProgress() {
+      const data = loadData();
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {});
+      updateOverview(data);
+    })();
+  </script>
+</body>
+</html>
