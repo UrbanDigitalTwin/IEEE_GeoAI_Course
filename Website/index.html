@@ -523,6 +523,69 @@
       font-weight: 800;
     }
 
+    .resources-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1.2rem;
+      align-items: start;
+    }
+    .citation-card,
+    .reference-card {
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: var(--radius);
+      padding: 1.35rem;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
+    }
+    .citation-box {
+      background: var(--soft);
+      border: 1px solid var(--border);
+      padding: 1rem;
+      border-radius: 12px;
+      font-size: .92rem;
+      color: var(--text);
+      margin: 1rem 0;
+    }
+    .citation-box code {
+      font-family: "Inter", system-ui, sans-serif;
+      white-space: normal;
+    }
+    .copy-status {
+      display: inline-flex;
+      align-items: center;
+      margin-left: .75rem;
+      color: #166534;
+      font-size: .85rem;
+      font-weight: 700;
+      opacity: 0;
+      transition: opacity .18s ease;
+    }
+    .copy-status.show { opacity: 1; }
+    .reference-card h3 {
+      color: var(--navy);
+      font-size: 1rem;
+      margin-bottom: .8rem;
+    }
+    .reference-list {
+      display: grid;
+      gap: .8rem;
+      list-style: none;
+    }
+    .reference-list li {
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+      padding-left: 1rem;
+      border-left: 3px solid #cfe8fb;
+    }
+    .reference-list strong { color: var(--navy); }
+    .reference-list a {
+      color: var(--blue);
+      font-weight: 700;
+      text-decoration: none;
+    }
+    .reference-list a:hover { text-decoration: underline; }
+
     .callout {
       display: grid;
       grid-template-columns: 1.2fr .8fr;
@@ -849,6 +912,7 @@
       .nav { align-items: flex-start; padding: .75rem 0; }
       .nav-links { display: none; }
       .hero-grid, .callout { grid-template-columns: 1fr; }
+      .resources-layout { grid-template-columns: 1fr; }
       .stats, .cards, .timeline { grid-template-columns: 1fr 1fr; }
       .callout-actions { justify-content: flex-start; }
       .overview-card { grid-template-columns: 1fr 1fr; }
@@ -1241,6 +1305,53 @@
       </div>
     </section>
 
+    <section id="resources">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Course Resources</div>
+            <h2>Cite this course and continue reading.</h2>
+            <p class="section-sub">
+              Use the course citation for reports, presentations, and projects. The references below support the course themes in GeoAI, remote sensing, disaster analytics, and digital twins.
+            </p>
+          </div>
+        </div>
+
+        <div class="citation-card" style="margin-bottom:1.2rem;">
+          <h3>Cite this Course</h3>
+          <div class="citation-box">
+            <code id="citationText">
+              Sabri, S., and Balijepalli, P. R. B., GeoAI for Disaster Management, Urban Digital Twin Lab, University of Central Florida, 2026.
+            </code>
+          </div>
+          <button class="btn btn-navy" type="button" onclick="copyCitation()">Copy Citation</button>
+          <span class="copy-status" id="copyStatus" aria-live="polite">Citation copied</span>
+        </div>
+
+        <div class="resources-layout">
+          <article class="reference-card">
+            <h3>Course References</h3>
+            <ul class="reference-list">
+              <li><strong>xyz. (2007).</strong> zzzzz. <em>GeoJournal</em>.</li>
+              <!-- <li><strong>Zhu, X. X., et al. (2017).</strong> Deep learning in remote sensing: a comprehensive review and list of resources. <em>IEEE Geoscience and Remote Sensing Magazine</em>.</li>
+              <li><strong>Reichstein, M., et al. (2019).</strong> Deep learning and process understanding for data-driven Earth system science. <em>Nature</em>.</li>
+              <li><strong>Janowicz, K., et al. (2020).</strong> GeoAI: spatially explicit artificial intelligence techniques for geographic knowledge discovery and beyond. <em>International Journal of Geographical Information Science</em>.</li> -->
+            </ul>
+          </article>
+
+          <article class="reference-card">
+            <h3>Further Reading</h3>
+            <ul class="reference-list">
+              <!-- <li><a href="https://www.undrr.org/" target="_blank" rel="noopener noreferrer">UNDRR</a>: disaster risk reduction terminology, frameworks, and Sendai Framework resources.</li>
+              <li><a href="https://www.earthdata.nasa.gov/learn/trainings" target="_blank" rel="noopener noreferrer">NASA Earthdata Training</a>: applied remote sensing and Earth observation tutorials.</li>
+              <li><a href="https://emergency.copernicus.eu/" target="_blank" rel="noopener noreferrer">Copernicus Emergency Management Service</a>: rapid mapping and disaster-monitoring products.</li> -->
+              <li><a href="https://www.fema.gov/emergency-managers/practitioners/hazus" target="_blank" rel="noopener noreferrer">FEMA Hazus</a>: risk assessment methods and tools for natural hazards.</li>
+            </ul>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="container">
         <div class="callout">
@@ -1307,6 +1418,28 @@
 
     function saveData(data) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function copyCitation() {
+      const citation = document.getElementById('citationText');
+      const status = document.getElementById('copyStatus');
+      const text = citation ? citation.innerText.trim().replace(/\s+/g, ' ') : '';
+      if (!text) return;
+
+      function showCopied() {
+        if (!status) return;
+        status.classList.add('show');
+        clearTimeout(status._t);
+        status._t = setTimeout(() => status.classList.remove('show'), 1800);
+      }
+
+      if (navigator.clipboard && window.isSecureContext) {
+        navigator.clipboard.writeText(text).then(showCopied).catch(() => {
+          window.prompt('Copy this citation:', text);
+        });
+      } else {
+        window.prompt('Copy this citation:', text);
+      }
     }
 
     function toggleWeek(n) {
