@@ -10,27 +10,50 @@
   <meta property="og:type" content="website" />
   <title>GeoAI for Disaster Management | Urban Digital Twin Lab</title>
 
-  <link rel="preconnect" data-env="FONTS_PRECONNECT_1" />
-  <link rel="preconnect" data-env="FONTS_PRECONNECT_2" crossorigin />
-  <link rel="stylesheet" data-env="FONTS_STYLESHEET" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Lora:wght@400;600;700&family=Inter:wght@400;500;600;700;800&display=swap" />
 
-  <script src="env.js"></script>
   <script>
-    function applyEnvLinks() {
-      const vars = window.__ENV__ || {};
-      document.querySelectorAll('[data-env]').forEach(el => {
-        const envKey = el.dataset.env;
-        const value = vars[envKey];
-        if (!value) return;
-        el.href = value;
-      });
-    }
+    (function() {
+      const FALLBACK = {
+        REPO_URL: "https://github.com/Phani-Raja-Bharath/IEEE_GeoAI_Course",
+        PRE_SURVEY_URL: "https://YOUR_PRE_SURVEY_LINK_HERE",
+        POST_SURVEY_URL: "https://YOUR_POST_SURVEY_LINK_HERE",
+        WEEK_01_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_01/week01_course_setup_and_geoai_intro.ipynb",
+        WEEK_02_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_02/week02_disaster_data_sources_and_visualization.ipynb",
+        WEEK_03_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_03/week03_ml_cv_fundamentals_for_disaster_management.ipynb",
+        WEEK_04_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_04/week04_surface_water_detection_with_segmentation.ipynb",
+        WEEK_05_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_05/week05_vehicle_based_urban_flood_detection.ipynb",
+        WEEK_06_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_06/week06_urban_flood_depth_estimation_pipeline.ipynb",
+        WEEK_07_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_07/week07_model_evaluation_and_error_analysis.ipynb",
+        WEEK_08_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_08/week08_disaster_response_decision_support.ipynb",
+        WEEK_09_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_09/week09_urban_digital_twin_integration.ipynb",
+        WEEK_10_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_10/week10_final_project_template.ipynb"
+      };
 
-    if (document.readyState === 'loading') {
-      document.addEventListener('DOMContentLoaded', applyEnvLinks);
-    } else {
-      applyEnvLinks();
-    }
+      function applyEnvLinks(vars) {
+        document.querySelectorAll('[data-env]').forEach(el => {
+          const value = vars[el.dataset.env];
+          if (!value) return;
+          el.href = value;
+        });
+      }
+
+      function applyWhenReady(vars) {
+        if (document.readyState === 'loading') {
+          document.addEventListener('DOMContentLoaded', () => applyEnvLinks(vars));
+        } else {
+          applyEnvLinks(vars);
+        }
+      }
+
+      const script = document.createElement('script');
+      script.src = 'env.js';
+      script.onload = () => applyWhenReady(Object.assign({}, FALLBACK, window.__ENV__ || {}));
+      script.onerror = () => applyWhenReady(FALLBACK);
+      document.head.appendChild(script);
+    })();
   </script>
 
   <style>
@@ -517,6 +540,295 @@
     .callout p { color: rgba(255,255,255,.76); margin-top: .6rem; }
     .callout-actions { display: flex; gap: .75rem; flex-wrap: wrap; justify-content: flex-end; }
 
+    .progress-section {
+      background: var(--soft);
+      padding-top: 5rem;
+    }
+    .overview-card {
+      background: var(--white);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 1.8rem 2rem;
+      box-shadow: var(--shadow);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr auto;
+      gap: 1.5rem;
+      align-items: center;
+    }
+    .ov-stat-n {
+      font-family: "Lora", serif;
+      font-size: 2rem;
+      color: var(--navy);
+      font-weight: 700;
+      line-height: 1;
+    }
+    .ov-stat-l {
+      font-size: .75rem;
+      font-weight: 800;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .08em;
+      margin-top: .3rem;
+    }
+    .ov-bar-label {
+      display: flex;
+      justify-content: space-between;
+      gap: 1rem;
+      font-size: .8rem;
+      color: var(--muted);
+      font-weight: 600;
+      margin-bottom: .4rem;
+    }
+    .ov-bar-track {
+      height: 10px;
+      background: var(--soft);
+      border-radius: 99px;
+      overflow: hidden;
+      border: 1px solid var(--border);
+    }
+    .ov-bar-fill {
+      height: 100%;
+      border-radius: 99px;
+      background: linear-gradient(90deg, var(--blue), #16a34a);
+      transition: width .5s cubic-bezier(.4,0,.2,1);
+      width: 0%;
+    }
+    .btn-reset {
+      background: transparent;
+      border: 1px solid var(--border);
+      color: var(--muted);
+      border-radius: 99px;
+      padding: .55rem 1rem;
+      font-size: .8rem;
+      font-weight: 600;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: border-color .15s, color .15s;
+    }
+    .btn-reset:hover {
+      border-color: #f87171;
+      color: #ef4444;
+    }
+    .resume-banner {
+      display: none;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      flex-wrap: wrap;
+      background: #e7f3ff;
+      border: 1px solid #b9dbf6;
+      border-radius: 14px;
+      padding: 1rem 1.4rem;
+      margin-bottom: 1.2rem;
+    }
+    .resume-banner span {
+      font-size: .9rem;
+      color: var(--navy);
+      font-weight: 600;
+    }
+    .btn-resume {
+      background: var(--blue);
+      color: #fff;
+      border: none;
+      border-radius: 99px;
+      padding: .5rem 1.1rem;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+    }
+    .complete-banner {
+      display: none;
+      background: linear-gradient(135deg, #052e16, #166534);
+      color: #fff;
+      border-radius: 20px;
+      padding: 1.8rem 2rem;
+      margin-top: 2rem;
+      text-align: center;
+    }
+    .complete-banner.visible { display: block; }
+    .complete-banner h2 {
+      color: #fff;
+      font-size: 1.5rem;
+      margin-bottom: .4rem;
+    }
+    .complete-banner p {
+      color: rgba(255,255,255,.75);
+      font-size: .9rem;
+      margin-bottom: 1rem;
+    }
+    .btn-cert {
+      display: inline-flex;
+      align-items: center;
+      gap: .4rem;
+      background: var(--gold);
+      color: var(--navy);
+      border-radius: 99px;
+      padding: .75rem 1.6rem;
+      font-size: .9rem;
+      font-weight: 800;
+      text-decoration: none;
+    }
+    .progress-weeks-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 1rem;
+      margin-top: 1.2rem;
+    }
+    .progress-section .week-card {
+      display: block;
+      padding: 1.3rem 1.4rem;
+      background: var(--white);
+      border: 1.5px solid var(--border);
+      border-radius: 20px;
+      text-decoration: none;
+      transition: box-shadow .2s, border-color .2s;
+    }
+    .progress-section .week-card.done {
+      border-color: #86efac;
+      background: linear-gradient(135deg, #f0fdf4, #fff);
+    }
+    .progress-section .week-card:hover {
+      box-shadow: 0 8px 24px rgba(11,31,58,.09);
+      transform: none;
+    }
+    .wk-header {
+      display: flex;
+      align-items: center;
+      gap: .9rem;
+      margin-bottom: .9rem;
+    }
+    .wk-num-box {
+      width: 52px;
+      height: 52px;
+      border-radius: 16px;
+      flex-shrink: 0;
+      background: linear-gradient(135deg, var(--navy), var(--blue));
+      color: var(--white);
+      font-weight: 900;
+      font-size: .82rem;
+      display: grid;
+      place-items: center;
+    }
+    .progress-section .week-card.done .wk-num-box {
+      background: linear-gradient(135deg, #166534, #16a34a);
+    }
+    .wk-title { flex: 1; }
+    .wk-title h3 {
+      font-size: .98rem;
+      font-weight: 700;
+      color: var(--navy);
+      margin-bottom: .15rem;
+    }
+    .wk-title p {
+      font-size: .82rem;
+      color: var(--muted);
+      line-height: 1.4;
+    }
+    .wk-check {
+      width: 26px;
+      height: 26px;
+      border-radius: 50%;
+      border: 2px solid var(--border);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      flex-shrink: 0;
+      cursor: pointer;
+      transition: border-color .15s, background .15s;
+      font-size: 13px;
+    }
+    .progress-section .week-card.done .wk-check {
+      border-color: #16a34a;
+      background: #16a34a;
+      color: #fff;
+    }
+    .wk-link {
+      display: inline-flex;
+      align-items: center;
+      gap: .5rem;
+      font-size: .78rem;
+      font-weight: 700;
+      color: var(--blue);
+      text-decoration: none;
+      margin-bottom: .8rem;
+      padding: .3rem .7rem;
+      border-radius: 99px;
+      border: 1px solid #b9dbf6;
+      background: #e7f3ff;
+      transition: background .15s;
+    }
+    .wk-link:hover { background: #cfe8fb; }
+    .wk-link img {
+      height: 16px;
+      vertical-align: middle;
+    }
+    .notes-label {
+      font-size: .75rem;
+      font-weight: 700;
+      color: var(--muted);
+      text-transform: uppercase;
+      letter-spacing: .07em;
+      margin-bottom: .35rem;
+    }
+    .notes-box {
+      width: 100%;
+      min-height: 64px;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .6rem .8rem;
+      font-family: "Inter", sans-serif;
+      font-size: .83rem;
+      color: var(--text);
+      resize: vertical;
+      background: var(--soft);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .notes-box:focus {
+      border-color: var(--sky);
+      background: #fff;
+    }
+    .complete-row {
+      display: flex;
+      align-items: center;
+      gap: .75rem;
+      margin-top: .9rem;
+      padding-top: .75rem;
+      border-top: 1px solid var(--border);
+    }
+    .toggle-btn {
+      flex: 1;
+      padding: .55rem;
+      border-radius: 10px;
+      font-size: .82rem;
+      font-weight: 700;
+      cursor: pointer;
+      border: 1.5px solid var(--border);
+      background: var(--soft);
+      color: var(--muted);
+      text-align: center;
+      transition: all .18s;
+    }
+    .toggle-btn:hover {
+      border-color: var(--blue);
+      color: var(--blue);
+      background: #e7f3ff;
+    }
+    .progress-section .week-card.done .toggle-btn {
+      border-color: #86efac;
+      background: #dcfce7;
+      color: #166534;
+    }
+    .saved-indicator {
+      font-size: .72rem;
+      color: #16a34a;
+      font-weight: 600;
+      opacity: 0;
+      transition: opacity .3s;
+    }
+    .saved-indicator.error { color: #dc2626; }
+    .saved-indicator.show { opacity: 1; }
+
     footer {
       border-top: 1px solid var(--border);
       background: #071426;
@@ -539,6 +851,8 @@
       .hero-grid, .callout { grid-template-columns: 1fr; }
       .stats, .cards, .timeline { grid-template-columns: 1fr 1fr; }
       .callout-actions { justify-content: flex-start; }
+      .overview-card { grid-template-columns: 1fr 1fr; }
+      .progress-weeks-grid { grid-template-columns: 1fr; }
     }
     @media (max-width: 620px) {
       .hero { padding-top: 4.5rem; }
@@ -548,6 +862,7 @@
       .section-head { display: block; }
       .week-card { grid-template-columns: 52px 1fr; }
       .week-num { width: 52px; height: 52px; border-radius: 16px; }
+      .overview-card { grid-template-columns: 1fr; }
     }
   </style>
 </head>
@@ -572,9 +887,8 @@
         <a href="#overview">Overview</a>
         <a href="#surveys">Surveys</a>
         <a href="#curriculum">Curriculum</a>
-        <a href="progress.html">My Progress</a>
-        <a href="#research">Research</a>
-        <a href="#curriculum">Notebooks</a>
+        <a href="#progress">My Progress</a>
+        <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
   </header>
@@ -594,8 +908,8 @@
           </p>
 
           <div class="hero-actions">
-            <a href="#overview" class="btn btn-primary">Start the Course</a>
-            <a href="progress.html" class="btn btn-outline">Track Progress</a>
+            <a href="#curriculum" class="btn btn-primary">Start the Course</a>
+            <a href="#progress" class="btn btn-outline">Track Progress</a>
             <a href="#surveys" class="btn btn-outline">Take Pre-Course Survey</a>
           </div>
 
@@ -757,6 +1071,176 @@
       </div>
     </section>
 
+    <section id="progress" class="progress-section">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">My Progress</div>
+            <h2>Track weekly completion and reflections.</h2>
+            <p class="section-sub">
+              Mark each week complete after adding at least two words of reflection. Your notes and progress are saved locally in this browser.
+            </p>
+          </div>
+        </div>
+
+        <div class="resume-banner" id="resumeBanner">
+          <span id="resumeText">Resume from where you left off</span>
+          <button class="btn-resume" type="button" onclick="resumeCourse()">Jump to Week</button>
+        </div>
+
+        <div class="overview-card">
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="countDone">0</div>
+            <div class="ov-stat-l">Weeks Completed</div>
+          </div>
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="countLeft">10</div>
+            <div class="ov-stat-l">Weeks Remaining</div>
+          </div>
+          <div class="ov-stat">
+            <div class="ov-stat-n" id="pctDone">0%</div>
+            <div class="ov-stat-l">Overall Progress</div>
+          </div>
+          <button class="btn-reset" type="button" onclick="resetAll()">Reset Progress</button>
+          <div style="grid-column: 1 / -1;">
+            <div class="ov-bar-label">
+              <span>Progress</span>
+              <span id="barLabel">0 of 10 weeks</span>
+            </div>
+            <div class="ov-bar-track"><div class="ov-bar-fill" id="barFill"></div></div>
+          </div>
+        </div>
+
+        <div class="complete-banner" id="completeBanner">
+          <h2>Course Complete</h2>
+          <p>You have finished all 10 weeks of GeoAI for Disaster Management.</p>
+          <a href="#surveys" class="btn-cert">Take Post-Course Survey</a>
+        </div>
+
+        <div class="progress-weeks-grid" id="weeksGrid">
+          <article class="week-card" id="card-1">
+            <div class="wk-header">
+              <div class="wk-num-box">W01</div>
+              <div class="wk-title"><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p></div>
+              <div class="wk-check" onclick="toggleWeek(1)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-1" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(1)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(1)" id="toggle-1">Mark as Complete</div><span class="saved-indicator" id="saved-1">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-2">
+            <div class="wk-header">
+              <div class="wk-num-box">W02</div>
+              <div class="wk-title"><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(2)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_02_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-2" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(2)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(2)" id="toggle-2">Mark as Complete</div><span class="saved-indicator" id="saved-2">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-3">
+            <div class="wk-header">
+              <div class="wk-num-box">W03</div>
+              <div class="wk-title"><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p></div>
+              <div class="wk-check" onclick="toggleWeek(3)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_03_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-3" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(3)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(3)" id="toggle-3">Mark as Complete</div><span class="saved-indicator" id="saved-3">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-4">
+            <div class="wk-header">
+              <div class="wk-num-box">W04</div>
+              <div class="wk-title"><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p></div>
+              <div class="wk-check" onclick="toggleWeek(4)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_04_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-4" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(4)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(4)" id="toggle-4">Mark as Complete</div><span class="saved-indicator" id="saved-4">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-5">
+            <div class="wk-header">
+              <div class="wk-num-box">W05</div>
+              <div class="wk-title"><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p></div>
+              <div class="wk-check" onclick="toggleWeek(5)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_05_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-5" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(5)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(5)" id="toggle-5">Mark as Complete</div><span class="saved-indicator" id="saved-5">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-6">
+            <div class="wk-header">
+              <div class="wk-num-box">W06</div>
+              <div class="wk-title"><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p></div>
+              <div class="wk-check" onclick="toggleWeek(6)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_06_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-6" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(6)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(6)" id="toggle-6">Mark as Complete</div><span class="saved-indicator" id="saved-6">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-7">
+            <div class="wk-header">
+              <div class="wk-num-box">W07</div>
+              <div class="wk-title"><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(7)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_07_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-7" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(7)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(7)" id="toggle-7">Mark as Complete</div><span class="saved-indicator" id="saved-7">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-8">
+            <div class="wk-header">
+              <div class="wk-num-box">W08</div>
+              <div class="wk-title"><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p></div>
+              <div class="wk-check" onclick="toggleWeek(8)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_08_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-8" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(8)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(8)" id="toggle-8">Mark as Complete</div><span class="saved-indicator" id="saved-8">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-9">
+            <div class="wk-header">
+              <div class="wk-num-box">W09</div>
+              <div class="wk-title"><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p></div>
+              <div class="wk-check" onclick="toggleWeek(9)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_09_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-9" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(9)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(9)" id="toggle-9">Mark as Complete</div><span class="saved-indicator" id="saved-9">Saved ✓</span></div>
+          </article>
+
+          <article class="week-card" id="card-10">
+            <div class="wk-header">
+              <div class="wk-num-box">W10</div>
+              <div class="wk-title"><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p></div>
+              <div class="wk-check" onclick="toggleWeek(10)">✓</div>
+            </div>
+            <a class="wk-link" data-env="WEEK_10_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
+            <div class="notes-label">Reflections & Learning Required</div>
+            <textarea class="notes-box" id="notes-10" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(10)"></textarea>
+            <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(10)" id="toggle-10">Mark as Complete</div><span class="saved-indicator" id="saved-10">Saved ✓</span></div>
+          </article>
+        </div>
+      </div>
+    </section>
+
     <section>
       <div class="container">
         <div class="callout">
@@ -770,7 +1254,7 @@
           </div>
           <div class="callout-actions">
             <a href="#curriculum" class="btn btn-primary">Explore Modules</a>
-            <a href="progress.html" class="btn btn-outline">Track Progress</a>
+            <a href="#progress" class="btn btn-outline">Track Progress</a>
             <a data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Open Week 01 Notebook</a>
           </div>
         </div>
@@ -799,9 +1283,162 @@
         <a href="#curriculum">
           Course Notebooks
         </a>
+        ·
+        <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">
+          GitHub Repository
+        </a>
       </div>
 
     </div>
   </footer>
+  <script>
+    const STORAGE_KEY = 'geoai_progress';
+    const TOTAL_WEEKS = 10;
+    const MIN_REFLECTION_WORDS = 2;
+    let firstIncompleteWeek = null;
+
+    function loadData() {
+      try {
+        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+      } catch {
+        return {};
+      }
+    }
+
+    function saveData(data) {
+      localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function toggleWeek(n) {
+      const data = loadData();
+      const notesEl = document.getElementById('notes-' + n);
+      const notes = notesEl.value.trim();
+      data['week_' + n] = data['week_' + n] || {};
+
+      if (!data['week_' + n].done && countWords(notes) < MIN_REFLECTION_WORDS) {
+        notesEl.focus();
+        flashSaved(n, 'Add at least 2 words first', true);
+        return;
+      }
+
+      data['week_' + n].notes = notesEl.value;
+      data['week_' + n].done = !data['week_' + n].done;
+      const completed = data['week_' + n].done;
+      saveData(data);
+      renderCard(n, data['week_' + n]);
+      updateOverview(data);
+      flashSaved(n, 'Saved ✓');
+
+      if (completed && n < TOTAL_WEEKS) {
+        setTimeout(() => {
+          const next = document.getElementById('card-' + (n + 1));
+          if (next) next.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        }, 400);
+      }
+    }
+
+    function saveNotes(n) {
+      const data = loadData();
+      data['week_' + n] = data['week_' + n] || {};
+      data['week_' + n].notes = document.getElementById('notes-' + n).value;
+      if (countWords(data['week_' + n].notes) < MIN_REFLECTION_WORDS && data['week_' + n].done) {
+        data['week_' + n].done = false;
+        renderCard(n, data['week_' + n]);
+        updateOverview(data);
+        flashSaved(n, 'Minimum 2 words', true);
+      } else {
+        flashSaved(n, 'Saved ✓');
+      }
+      saveData(data);
+    }
+
+    function countWords(value) {
+      return value.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function flashSaved(n, message = 'Saved ✓', isError = false) {
+      const el = document.getElementById('saved-' + n);
+      el.textContent = message;
+      el.classList.toggle('error', isError);
+      el.classList.add('show');
+      clearTimeout(el._t);
+      el._t = setTimeout(() => {
+        el.classList.remove('show');
+        el.classList.remove('error');
+      }, 1800);
+    }
+
+    function renderCard(n, weekData) {
+      const card = document.getElementById('card-' + n);
+      const toggle = document.getElementById('toggle-' + n);
+      const notes = document.getElementById('notes-' + n);
+      const done = weekData && weekData.done;
+      if (done) {
+        card.classList.add('done');
+        toggle.textContent = '✓ Completed';
+      } else {
+        card.classList.remove('done');
+        toggle.textContent = 'Mark as Complete';
+      }
+      notes.value = weekData && weekData.notes ? weekData.notes : '';
+    }
+
+    function updateOverview(data) {
+      const done = Object.values(data).filter(w => w && w.done).length;
+      const pct = Math.round((done / TOTAL_WEEKS) * 100);
+      document.getElementById('countDone').textContent = done;
+      document.getElementById('countLeft').textContent = TOTAL_WEEKS - done;
+      document.getElementById('pctDone').textContent = pct + '%';
+      document.getElementById('barFill').style.width = pct + '%';
+      document.getElementById('barLabel').textContent = done + ' of ' + TOTAL_WEEKS + ' weeks';
+      document.getElementById('completeBanner').classList.toggle('visible', done === TOTAL_WEEKS);
+      updateResumeBanner(data, done);
+    }
+
+    function updateResumeBanner(data, done) {
+      const banner = document.getElementById('resumeBanner');
+      if (!banner || done === 0 || done === TOTAL_WEEKS) {
+        if (banner) banner.style.display = 'none';
+        firstIncompleteWeek = null;
+        return;
+      }
+
+      firstIncompleteWeek = null;
+      for (let n = 1; n <= TOTAL_WEEKS; n++) {
+        if (!data['week_' + n] || !data['week_' + n].done) {
+          firstIncompleteWeek = n;
+          break;
+        }
+      }
+
+      if (firstIncompleteWeek) {
+        document.getElementById('resumeText').textContent = 'Continue from Week ' + firstIncompleteWeek;
+        banner.style.display = 'flex';
+      } else {
+        banner.style.display = 'none';
+      }
+    }
+
+    function resumeCourse() {
+      if (!firstIncompleteWeek) return;
+      const el = document.getElementById('card-' + firstIncompleteWeek);
+      if (el) el.scrollIntoView({ behavior: 'smooth', block: 'center' });
+    }
+
+    function resetAll() {
+      if (!confirm('Reset all progress and notes? This cannot be undone.')) return;
+      localStorage.removeItem(STORAGE_KEY);
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, {});
+      updateOverview({});
+      const banner = document.getElementById('resumeBanner');
+      if (banner) banner.style.display = 'none';
+    }
+
+    (function initProgress() {
+      const data = loadData();
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {});
+      updateOverview(data);
+    })();
+  </script>
 </body>
 </html>
