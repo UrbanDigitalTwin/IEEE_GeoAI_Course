@@ -907,6 +907,17 @@
       color: var(--muted);
       line-height: 1.4;
     }
+    .lock-hint {
+      display: none;
+      margin-top: .3rem;
+      color: #7c2d12;
+      font-size: .75rem;
+      font-weight: 800;
+      line-height: 1.35;
+    }
+    .week-card.locked .lock-hint {
+      display: block;
+    }
     .wk-check {
       width: 26px;
       height: 26px;
@@ -2051,8 +2062,7 @@
       }, 1800);
     }
 
-    function renderCard(n, weekData) {
-      const data = loadData();
+    function renderCard(n, weekData, data) {
       const card = document.getElementById('card-' + n);
       const toggle = document.getElementById('toggle-' + n);
       const notes = document.getElementById('notes-' + n);
@@ -2061,8 +2071,15 @@
       const quizBtn = card ? card.querySelector('.quiz-btn') : null;
       const weekLink = card ? card.querySelector('.wk-link') : null;
       const check = card ? card.querySelector('.wk-check') : null;
+      const title = card ? card.querySelector('.wk-title') : null;
       const done = weekData && weekData.done;
       const locked = !isWeekUnlocked(n, data);
+      let lockHint = card ? card.querySelector('.lock-hint') : null;
+      if (title && !lockHint) {
+        lockHint = document.createElement('span');
+        lockHint.className = 'lock-hint';
+        title.appendChild(lockHint);
+      }
       if (done) {
         card.classList.add('done');
         toggle.textContent = '✓ Completed';
@@ -2081,12 +2098,15 @@
         weekLink.setAttribute('aria-disabled', locked ? 'true' : 'false');
         weekLink.tabIndex = locked ? -1 : 0;
       }
+      if (lockHint) lockHint.textContent = locked ? lockedMessage(n) : '';
+      if (card) card.title = locked ? lockedMessage(n) : '';
+      if (toggle) toggle.title = locked ? lockedMessage(n) : '';
       if (question && quizBank[n]) question.textContent = quizBank[n].question;
       updateQuizFeedback(n);
     }
 
     function renderAllCards(data = loadData()) {
-      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {});
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {}, data);
     }
 
     function updateOverview(data) {
