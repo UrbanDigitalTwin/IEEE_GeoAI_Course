@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+﻿<!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -428,6 +428,42 @@
       margin-bottom: .4rem;
     }
     .card p { color: var(--muted); font-size: .9rem; }
+    .outcomes-list {
+      counter-reset: outcome;
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: .85rem;
+      margin-top: 1.8rem;
+      list-style: none;
+    }
+    .outcomes-list li {
+      border: 1px solid var(--border);
+      background: var(--white);
+      border-radius: 16px;
+      padding: 1rem 1.1rem;
+      display: grid;
+      grid-template-columns: 34px 1fr;
+      gap: .85rem;
+      align-items: start;
+      color: var(--muted);
+      font-size: .9rem;
+      line-height: 1.5;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .04);
+    }
+    .outcomes-list li::before {
+      counter-increment: outcome;
+      content: counter(outcome, decimal-leading-zero);
+      width: 34px;
+      height: 34px;
+      border-radius: 12px;
+      display: grid;
+      place-items: center;
+      background: #e7f3ff;
+      color: var(--blue);
+      font-size: .72rem;
+      font-weight: 900;
+      line-height: 1;
+    }
 
     .survey-grid, .research-grid {
       display: grid;
@@ -543,7 +579,7 @@
       display: grid;
       grid-template-columns: 1fr 1fr;
       gap: 1.2rem;
-      align-items: start;
+      align-items: stretch;
     }
     .citation-card,
     .reference-card {
@@ -581,6 +617,53 @@
       color: var(--navy);
       font-size: 1rem;
       margin-bottom: .8rem;
+    }
+    .reference-collapse {
+      display: flex;
+      flex-direction: column;
+      height: 100%;
+    }
+    .reference-collapse summary {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 1rem;
+      cursor: pointer;
+      color: var(--navy);
+      font-size: 1rem;
+      font-weight: 800;
+      list-style: none;
+      min-height: 42px;
+    }
+    .reference-collapse summary::-webkit-details-marker {
+      display: none;
+    }
+    .reference-collapse summary::after {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 28px;
+      height: 28px;
+      border: 1px solid var(--border);
+      border-radius: 999px;
+      color: var(--navy);
+      background: var(--soft);
+      font-size: 1.1rem;
+      line-height: 1;
+      flex: 0 0 auto;
+    }
+    .reference-collapse[open] summary {
+      margin-bottom: .8rem;
+    }
+    .reference-collapse[open] summary::after {
+      content: "-";
+    }
+    .reference-count {
+      margin-left: auto;
+      color: var(--muted);
+      font-size: .82rem;
+      font-weight: 700;
+      white-space: nowrap;
     }
     .reference-list {
       display: grid;
@@ -704,6 +787,18 @@
       color: var(--navy);
       font-weight: 600;
     }
+    .progress-warning {
+      background: #fff7ed;
+      border: 1px solid #fed7aa;
+      border-left: 4px solid #f59e0b;
+      border-radius: 14px;
+      padding: 1rem 1.2rem;
+      margin-bottom: 1.2rem;
+      color: #7c2d12;
+      font-size: .9rem;
+      font-weight: 600;
+      line-height: 1.5;
+    }
     .btn-resume {
       background: var(--blue);
       color: #fff;
@@ -752,6 +847,9 @@
       gap: 1rem;
       margin-top: 1.2rem;
     }
+    .notebooks-heading {
+      margin-top: 2rem;
+    }
     .progress-section .week-card {
       display: block;
       padding: 1.3rem 1.4rem;
@@ -765,9 +863,16 @@
       border-color: #86efac;
       background: linear-gradient(135deg, #f0fdf4, #fff);
     }
+    .progress-section .week-card.locked {
+      opacity: .58;
+      background: #f8fafc;
+    }
     .progress-section .week-card:hover {
       box-shadow: 0 8px 24px rgba(11,31,58,.09);
       transform: none;
+    }
+    .progress-section .week-card.locked:hover {
+      box-shadow: none;
     }
     .wk-header {
       display: flex;
@@ -836,6 +941,13 @@
       transition: background .15s;
     }
     .wk-link:hover { background: #cfe8fb; }
+    .week-card.locked .wk-link,
+    .week-card.locked .quiz-btn,
+    .week-card.locked .toggle-btn,
+    .week-card.locked .wk-check {
+      pointer-events: none;
+      cursor: not-allowed;
+    }
     .wk-link img {
       height: 16px;
       vertical-align: middle;
@@ -866,6 +978,65 @@
       border-color: var(--sky);
       background: #fff;
     }
+    .quiz-btn {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      margin-top: .75rem;
+      margin-bottom: .8rem;
+      border: 1px solid #b9dbf6;
+      background: #e7f3ff;
+      color: var(--blue);
+      border-radius: 99px;
+      padding: .45rem .85rem;
+      font-size: .78rem;
+      font-weight: 800;
+      cursor: pointer;
+      transition: background .15s, border-color .15s;
+    }
+    .quiz-btn:hover {
+      background: #cfe8fb;
+      border-color: var(--sky);
+    }
+    .quiz-area {
+      display: none;
+      margin-bottom: .9rem;
+      border: 1px solid var(--border);
+      background: #fbfdff;
+      border-radius: 14px;
+      padding: .85rem;
+    }
+    .quiz-question {
+      color: var(--navy);
+      font-size: .86rem;
+      font-weight: 700;
+      line-height: 1.45;
+      margin-bottom: .55rem;
+    }
+    .quiz-box {
+      width: 100%;
+      border: 1px solid var(--border);
+      border-radius: 10px;
+      padding: .58rem .75rem;
+      font-family: "Inter", system-ui, sans-serif;
+      font-size: .83rem;
+      color: var(--text);
+      background: var(--white);
+      outline: none;
+      transition: border-color .15s;
+    }
+    .quiz-box:focus {
+      border-color: var(--sky);
+    }
+    .quiz-feedback {
+      min-height: 1.2rem;
+      margin-top: .45rem;
+      color: var(--muted);
+      font-size: .76rem;
+      font-weight: 700;
+    }
+    .quiz-feedback.correct { color: #166534; }
+    .quiz-feedback.error { color: #b45309; }
     .complete-row {
       display: flex;
       align-items: center;
@@ -929,6 +1100,7 @@
       .brand-logos { display: none; }
       .hero-grid, .callout { grid-template-columns: 1fr; }
       .resources-layout { grid-template-columns: 1fr; }
+      .outcomes-list { grid-template-columns: 1fr; }
       .stats, .cards, .timeline { grid-template-columns: 1fr 1fr; }
       .callout-actions { justify-content: flex-start; }
       .overview-card { grid-template-columns: 1fr 1fr; }
@@ -959,6 +1131,9 @@
         </span>
         <div class="brand-logos">
           <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">
+            <img class="logo-smc" src="assets/UDT_Logo.png" alt="UDT Logo">
+          </a>
+          <a href="https://www.ucf.edu/" target="_blank" rel="noopener noreferrer">
             <img class="logo-ucf" src="assets/UCF_logo.png" alt="UCF Logo">
           </a>
           <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">
@@ -1064,13 +1239,13 @@
           </article>
           <article class="card">
             <div class="card-icon">🏙️</div>
-            <h3>Urban Damage Assessment</h3>
-            <p>Analyze buildings, infrastructure exposure, and flood-depth proxies in urban environments.</p>
+            <h3>Flood Depth estimation</h3>
+            <p>Estimate flood-depth proxies in urban environments.</p>
           </article>
           <article class="card">
             <div class="card-icon">📊</div>
             <h3>Reproducible Pipelines</h3>
-            <p>Convert raw open data into interpretable maps, metrics, and course-ready notebooks.</p>
+            <p>Convert raw open data into interpretable maps, metrics, and provide recommendations.</p>
           </article>
           <article class="card">
             <div class="card-icon">🌍</div>
@@ -1105,6 +1280,30 @@
       </div>
     </section>
 
+    <section id="outcomes">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="eyebrow">Learning Outcomes</div>
+            <h2>By the end of this course, learners will be able to:</h2>
+          </div>
+        </div>
+
+        <ul class="outcomes-list">
+          <li>Identify and work with foundational geospatial datasets used in disaster management, including raster data, vector layers, satellite imagery, DEMs, and open disaster datasets.</li>
+          <li>Visualize and preprocess geospatial disaster data using Python workflows for analysis-ready modeling.</li>
+          <li>Apply machine learning and computer vision techniques to disaster-related geospatial problems.</li>
+          <li>Develop segmentation workflows for flood and surface water detection using remote sensing imagery.</li>
+          <li>Build multimodal flood detection pipelines using vehicle imagery and urban sensing approaches.</li>
+          <li>Estimate urban flood depth using AI-assisted geospatial workflows and supporting terrain/contextual datasets.</li>
+          <li>Evaluate model performance and interpret failure cases using appropriate validation metrics.</li>
+          <li>Translate GeoAI outputs into disaster-response decision support systems for operational planning.</li>
+          <li>Integrate GeoAI outputs into urban digital twin frameworks for resilience and preparedness.</li>
+          <li>Design and present an end-to-end disaster analytics project using open-source GeoAI workflows.</li>
+        </ul>
+      </div>
+    </section>
+
     <section id="curriculum">
       <div class="container">
         <div class="section-head">
@@ -1116,40 +1315,40 @@
               exercises, and extension activities.
             </p>
           </div>
-          <a class="btn btn-navy" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer">Open Week 01 Notebook</a>
+
         </div>
 
         <div class="timeline">
-          <a class="week-card" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer">
+          <article class="week-card">
             <div class="week-num">W01</div><div><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_02_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W02</div><div><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_03_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W03</div><div><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_04_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W04</div><div><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_05_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W05</div><div><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_06_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W06</div><div><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_07_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W07</div><div><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_08_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W08</div><div><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_09_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W09</div><div><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p></div>
-          </a>
-          <a class="week-card" data-env="WEEK_10_URL" target="_blank" rel="noopener noreferrer">
+          </article>
+          <article class="week-card">
             <div class="week-num">W10</div><div><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p></div>
-          </a>
+          </article>
         </div>
       </div>
     </section>
@@ -1169,6 +1368,10 @@
         <div class="resume-banner" id="resumeBanner">
           <span id="resumeText">Resume from where you left off</span>
           <button class="btn-resume" type="button" onclick="resumeCourse()">Jump to Week</button>
+        </div>
+
+        <div class="progress-warning" role="note">
+          Your progress is saved automatically in this browser. To continue where you left off, use the same device and browser. Clearing browser data or switching devices may reset your saved progress.
         </div>
 
         <div class="overview-card">
@@ -1199,7 +1402,9 @@
           <p>You have finished all 10 weeks of GeoAI for Disaster Management.</p>
           <a href="#surveys" class="btn-cert">Take Post-Course Survey</a>
         </div>
-
+        <div class="notebooks-heading">
+          <div class="eyebrow">Notebooks</div>
+        </div>
         <div class="progress-weeks-grid" id="weeksGrid">
           <article class="week-card" id="card-1">
             <div class="wk-header">
@@ -1210,6 +1415,13 @@
             <a class="wk-link" data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-1" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(1)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(1)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-1">
+              <label class="notes-label" for="quiz-1">Knowledge Check</label>
+              <p class="quiz-question" id="question-1"></p>
+              <input class="quiz-box" id="quiz-1" placeholder="Enter your answer" oninput="saveQuiz(1)">
+              <div class="quiz-feedback" id="quiz-feedback-1" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(1)" id="toggle-1">Mark as Complete</div><span class="saved-indicator" id="saved-1">Saved ✓</span></div>
           </article>
 
@@ -1222,6 +1434,13 @@
             <a class="wk-link" data-env="WEEK_02_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-2" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(2)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(2)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-2">
+              <label class="notes-label" for="quiz-2">Knowledge Check</label>
+              <p class="quiz-question" id="question-2"></p>
+              <input class="quiz-box" id="quiz-2" placeholder="Enter your answer" oninput="saveQuiz(2)">
+              <div class="quiz-feedback" id="quiz-feedback-2" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(2)" id="toggle-2">Mark as Complete</div><span class="saved-indicator" id="saved-2">Saved ✓</span></div>
           </article>
 
@@ -1234,6 +1453,13 @@
             <a class="wk-link" data-env="WEEK_03_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-3" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(3)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(3)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-3">
+              <label class="notes-label" for="quiz-3">Knowledge Check</label>
+              <p class="quiz-question" id="question-3"></p>
+              <input class="quiz-box" id="quiz-3" placeholder="Enter your answer" oninput="saveQuiz(3)">
+              <div class="quiz-feedback" id="quiz-feedback-3" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(3)" id="toggle-3">Mark as Complete</div><span class="saved-indicator" id="saved-3">Saved ✓</span></div>
           </article>
 
@@ -1246,6 +1472,13 @@
             <a class="wk-link" data-env="WEEK_04_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-4" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(4)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(4)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-4">
+              <label class="notes-label" for="quiz-4">Knowledge Check</label>
+              <p class="quiz-question" id="question-4"></p>
+              <input class="quiz-box" id="quiz-4" placeholder="Enter your answer" oninput="saveQuiz(4)">
+              <div class="quiz-feedback" id="quiz-feedback-4" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(4)" id="toggle-4">Mark as Complete</div><span class="saved-indicator" id="saved-4">Saved ✓</span></div>
           </article>
 
@@ -1258,6 +1491,13 @@
             <a class="wk-link" data-env="WEEK_05_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-5" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(5)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(5)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-5">
+              <label class="notes-label" for="quiz-5">Knowledge Check</label>
+              <p class="quiz-question" id="question-5"></p>
+              <input class="quiz-box" id="quiz-5" placeholder="Enter your answer" oninput="saveQuiz(5)">
+              <div class="quiz-feedback" id="quiz-feedback-5" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(5)" id="toggle-5">Mark as Complete</div><span class="saved-indicator" id="saved-5">Saved ✓</span></div>
           </article>
 
@@ -1270,6 +1510,13 @@
             <a class="wk-link" data-env="WEEK_06_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-6" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(6)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(6)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-6">
+              <label class="notes-label" for="quiz-6">Knowledge Check</label>
+              <p class="quiz-question" id="question-6"></p>
+              <input class="quiz-box" id="quiz-6" placeholder="Enter your answer" oninput="saveQuiz(6)">
+              <div class="quiz-feedback" id="quiz-feedback-6" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(6)" id="toggle-6">Mark as Complete</div><span class="saved-indicator" id="saved-6">Saved ✓</span></div>
           </article>
 
@@ -1282,6 +1529,13 @@
             <a class="wk-link" data-env="WEEK_07_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-7" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(7)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(7)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-7">
+              <label class="notes-label" for="quiz-7">Knowledge Check</label>
+              <p class="quiz-question" id="question-7"></p>
+              <input class="quiz-box" id="quiz-7" placeholder="Enter your answer" oninput="saveQuiz(7)">
+              <div class="quiz-feedback" id="quiz-feedback-7" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(7)" id="toggle-7">Mark as Complete</div><span class="saved-indicator" id="saved-7">Saved ✓</span></div>
           </article>
 
@@ -1294,6 +1548,13 @@
             <a class="wk-link" data-env="WEEK_08_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-8" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(8)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(8)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-8">
+              <label class="notes-label" for="quiz-8">Knowledge Check</label>
+              <p class="quiz-question" id="question-8"></p>
+              <input class="quiz-box" id="quiz-8" placeholder="Enter your answer" oninput="saveQuiz(8)">
+              <div class="quiz-feedback" id="quiz-feedback-8" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(8)" id="toggle-8">Mark as Complete</div><span class="saved-indicator" id="saved-8">Saved ✓</span></div>
           </article>
 
@@ -1306,6 +1567,13 @@
             <a class="wk-link" data-env="WEEK_09_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-9" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(9)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(9)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-9">
+              <label class="notes-label" for="quiz-9">Knowledge Check</label>
+              <p class="quiz-question" id="question-9"></p>
+              <input class="quiz-box" id="quiz-9" placeholder="Enter your answer" oninput="saveQuiz(9)">
+              <div class="quiz-feedback" id="quiz-feedback-9" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(9)" id="toggle-9">Mark as Complete</div><span class="saved-indicator" id="saved-9">Saved ✓</span></div>
           </article>
 
@@ -1318,6 +1586,13 @@
             <a class="wk-link" data-env="WEEK_10_URL" target="_blank" rel="noopener noreferrer"><img src="https://colab.research.google.com/assets/colab-badge.svg" alt="Open in Colab" /> Open in Colab</a>
             <div class="notes-label">Reflections & Learning Required</div>
             <textarea class="notes-box" id="notes-10" placeholder="What did you learn? Any challenges or key takeaways..." oninput="saveNotes(10)"></textarea>
+            <button class="quiz-btn" type="button" onclick="showQuiz(10)">Answer Knowledge Check</button>
+            <div class="quiz-area" id="quiz-area-10">
+              <label class="notes-label" for="quiz-10">Knowledge Check</label>
+              <p class="quiz-question" id="question-10"></p>
+              <input class="quiz-box" id="quiz-10" placeholder="Enter your answer" oninput="saveQuiz(10)">
+              <div class="quiz-feedback" id="quiz-feedback-10" aria-live="polite"></div>
+            </div>
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(10)" id="toggle-10">Mark as Complete</div><span class="saved-indicator" id="saved-10">Saved ✓</span></div>
           </article>
         </div>
@@ -1340,7 +1615,7 @@
           <h3>Cite this Course</h3>
           <div class="citation-box">
             <code id="citationText">
-              <a href="https://scholar.google.com/citations?user=Mt0UxCsAAAAJ" target="_blank" rel="noopener noreferrer">Sabri, S.</a>, and <a href="https://phani-raja-bharath.github.io/portfolio-site/" target="_blank" rel="noopener noreferrer">Balijepalli, P. R. B.</a>, GeoAI for Disaster Management, <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab, University of Central Florida</a>, 2026.
+              <a href="https://www.ist.ucf.edu/faculty/sabri-soheil/" target="_blank" rel="noopener noreferrer">Sabri, S.</a>, and <a href="https://phani-raja-bharath.github.io/portfolio-site/" target="_blank" rel="noopener noreferrer">Balijepalli, P. R. B.</a>, GeoAI for Disaster Management, <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab, School of Modeling, Simulation and Training, University of Central Florida</a>, 2026.
             </code>
           </div>
           <button class="btn btn-navy" type="button" onclick="copyCitation()">Copy Citation</button>
@@ -1349,22 +1624,95 @@
 
         <div class="resources-layout">
           <article class="reference-card">
-            <h3>Course References</h3>
+            <details class="reference-collapse">
+              <summary><span>Course References</span><span class="reference-count">78 references</span></summary>
             <ul class="reference-list">
-              <li><strong>xyz. (2007).</strong> zzzzz. <em>GeoJournal</em>.</li>
-              <!-- <li><strong>Zhu, X. X., et al. (2017).</strong> Deep learning in remote sensing: a comprehensive review and list of resources. <em>IEEE Geoscience and Remote Sensing Magazine</em>.</li>
-              <li><strong>Reichstein, M., et al. (2019).</strong> Deep learning and process understanding for data-driven Earth system science. <em>Nature</em>.</li>
-              <li><strong>Janowicz, K., et al. (2020).</strong> GeoAI: spatially explicit artificial intelligence techniques for geographic knowledge discovery and beyond. <em>International Journal of Geographical Information Science</em>.</li> -->
+              <li><strong>Maladhy and Kumari. (2025).</strong> <a href="https://ieeexplore.ieee.org/document/11135151" target="_blank" rel="noopener noreferrer">Anomaly Detection in GeoLLM Using Variational Autoencoder</a>. <em>2025 6th International Conference on Data Intelligence and Cognitive Informatics (ICDICI)</em>.</li>
+              <li><strong>Bittencourt et al. (2013).</strong> <a href="https://ieeexplore.ieee.org/document/6549494" target="_blank" rel="noopener noreferrer">Evaluating preparedness and resilience initiatives for distressed populations vulnerable to disasters in Rio de Janeiro, Brazil</a>. <em>2013 IEEE Systems and Information Engineering Design Symposium</em>.</li>
+              <li><strong>S&#225;ndor. (2025).</strong> <a href="https://github.com/gabboraron/Nvidia-Disaster_Risk_Monitoring_Using_Satellite_Imagery" target="_blank" rel="noopener noreferrer">gabboraron/Nvidia-Disaster_Risk_Monitoring_Using_Satellite_Imagery</a>.</li>
+              <li><strong>Lagap and Ghaffarian. (2025).</strong> <a href="https://doi.org/10.1080/19475705.2025.2485329" target="_blank" rel="noopener noreferrer">Digital twin-enabled post-disaster damage and recovery monitoring with deep learning: leveraging transfer learning, attention mechanisms, and explainable AI</a>. <em>Geomatics, Natural Hazards and Risk</em>.</li>
+              <li><strong>Al-Alie. (2025).</strong> <a href="https://github.com/zak-510/disaster-classifier" target="_blank" rel="noopener noreferrer">zak-510/disaster-classifier</a>.</li>
+              <li><strong>Khodaei et al. (2025).</strong> <a href="https://www.nature.com/articles/s41598-025-97008-0" target="_blank" rel="noopener noreferrer">Future flood susceptibility mapping under climate and land use change</a>. <em>Scientific Reports</em>.</li>
+              <li><strong>Bian et al. (2025).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S2214581825004185" target="_blank" rel="noopener noreferrer">Deep learning surrogate models for spatiotemporal prediction of coastal flooding inundations in Tianjin, China</a>. <em>Journal of Hydrology: Regional Studies</em>.</li>
+              <li><strong>Mikołajewski et al. (2025).</strong> <a href="https://doi.org/10.1007/s13280-024-02069-6" target="_blank" rel="noopener noreferrer">Heavy rainfalls in Poland and their hyetographs</a>. <em>Ambio</em>.</li>
+              <li><strong>Cohen et al. (2019).</strong> <a href="https://nhess.copernicus.org/articles/19/2053/2019/" target="_blank" rel="noopener noreferrer">The Floodwater Depth Estimation Tool (FwDET v2.0) for improved remote sensing analysis of coastal flooding</a>. <em>Natural Hazards and Earth System Sciences</em>.</li>
+              <li><strong>Endendijk et al. (2023).</strong> <a href="https://onlinelibrary.wiley.com/doi/abs/10.1029/2022WR034192" target="_blank" rel="noopener noreferrer">Flood Vulnerability Models and Household Flood Damage Mitigation Measures: An Econometric Analysis of Survey Data</a>. <em>Water Resources Research</em>.</li>
+              <li><strong>Jamali et al. (2024).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S1569843224000165" target="_blank" rel="noopener noreferrer">Residual wave vision U-Net for flood mapping using dual polarization Sentinel-1 SAR imagery</a>. <em>International Journal of Applied Earth Observation and Geoinformation</em>.</li>
+              <li><strong>Rom&#225;n et al. (2025).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S157495412500442X" target="_blank" rel="noopener noreferrer">UAV imagery in natural disasters: Real-time damage assessment of flash flooding events</a>. <em>Ecological Informatics</em>.</li>
+              <li><strong>Fawakherji et al. (2025).</strong> <a href="https://www.nature.com/articles/s41597-025-04554-3" target="_blank" rel="noopener noreferrer">DeepFlood for Inundated Vegetation High-Resolution Dataset for Accurate Flood Mapping and Segmentation</a>. <em>Scientific Data</em>.</li>
+              <li><strong>Zhang et al. (2025).</strong> <a href="https://www.mdpi.com/2072-4292/17/11/1886" target="_blank" rel="noopener noreferrer">Optical Remote Sensing for Global Flood Disaster Mapping: A Critical Review Towards Operational Readiness</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Tay et al. (2020).</strong> <a href="https://www.nature.com/articles/s41597-020-0443-5" target="_blank" rel="noopener noreferrer">Rapid flood and damage mapping using synthetic aperture radar in response to Typhoon Hagibis, Japan</a>. <em>Scientific Data</em>.</li>
+              <li><strong>Lahsaini et al. (2024).</strong> <a href="https://www.mdpi.com/2072-4292/16/12/2193" target="_blank" rel="noopener noreferrer">A Synthetic Aperture Radar-Based Robust Satellite Technique (RST) for Timely Mapping of Floods</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>No author. (2025).</strong> <a href="https://github.com/csdms-contrib/fwdet" target="_blank" rel="noopener noreferrer">csdms-contrib/fwdet</a>. <em>csdms-contrib</em>.</li>
+              <li><strong>Zhao et al. (2024).</strong> <a href="https://www.mdpi.com/2073-4441/16/10/1407" target="_blank" rel="noopener noreferrer">A Comprehensive Review of Methods for Hydrological Forecasting Based on Deep Learning</a>. <em>Water</em>.</li>
+              <li><strong>Zhou et al. (2023).</strong> <a href="https://hess.copernicus.org/articles/27/1791/2023/" target="_blank" rel="noopener noreferrer">A deep-learning-technique-based data-driven model for accurate and rapid flood predictions in temporal and spatial dimensions</a>. <em>Hydrology and Earth System Sciences</em>.</li>
+              <li><strong>Darnkachatarn and Kajitani. (2024).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/jfr3.12997" target="_blank" rel="noopener noreferrer">Long‐term flood exposure assessment using satellite‐based land use change detection and inundation simulation: A 30‐year case study of the Bangkok Metropolitan Region</a>. <em>Journal of Flood Risk Management</em>.</li>
+              <li><strong>Najafi et al. (2024).</strong> <a href="https://www.nature.com/articles/s41467-024-48065-y" target="_blank" rel="noopener noreferrer">High-resolution impact-based early warning system for riverine flooding</a>. <em>Nature Communications</em>.</li>
+              <li><strong>Wania et al. (2021).</strong> <a href="https://www.mdpi.com/2072-4292/13/11/2114" target="_blank" rel="noopener noreferrer">Increasing Timeliness of Satellite-Based Flood Mapping Using Early Warning Systems in the Copernicus Emergency Management Service</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Schwarz and Kuleshov. (2022).</strong> <a href="https://www.mdpi.com/2072-4292/14/19/4894" target="_blank" rel="noopener noreferrer">Flood Vulnerability Assessment and Mapping: A Case Study for Australia&#39;s Hawkesbury-Nepean Catchment</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Gemitzi et al. (2024).</strong> <a href="https://www.mdpi.com/2073-445X/13/11/1929" target="_blank" rel="noopener noreferrer">A Constantly Updated Flood Hazard Assessment Tool Using Satellite-Based High-Resolution Land Cover Dataset Within Google Earth Engine</a>. <em>Land</em>.</li>
+              <li><strong>Chan et al. (2022).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S2405844022003632" target="_blank" rel="noopener noreferrer">A systematic review of the flood vulnerability using geographic information system</a>. <em>Heliyon</em>.</li>
+              <li><strong>Zhang et al. (2023).</strong> <a href="https://www.tandfonline.com/doi/full/10.1080/17538947.2023.2230978" target="_blank" rel="noopener noreferrer">A new multi-source remote sensing image sample dataset with high resolution for flood area extraction: GF-FloodNet</a>. <em>International Journal of Digital Earth</em>.</li>
+              <li><strong>Mydlarz et al. (2024).</strong> <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2023WR036806" target="_blank" rel="noopener noreferrer">FloodNet: Low‐Cost Ultrasonic Sensors for Real‐Time Measurement of Hyperlocal, Street‐Level Floods in New York City</a>. <em>Water Resources Research</em>.</li>
+              <li><strong>Bentivoglio et al. (2022).</strong> <a href="https://hess.copernicus.org/articles/26/4345/2022/" target="_blank" rel="noopener noreferrer">Deep learning methods for flood mapping: a review of existing applications and future research directions</a>. <em>Hydrology and Earth System Sciences</em>.</li>
+              <li><strong>Seleem et al. (2023).</strong> <a href="https://nhess.copernicus.org/articles/23/809/2023/" target="_blank" rel="noopener noreferrer">Transferability of data-driven models to predict urban pluvial flood water depth in Berlin, Germany</a>. <em>Natural Hazards and Earth System Sciences</em>.</li>
+              <li><strong>Hu et al. (2019).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0022169419305323" target="_blank" rel="noopener noreferrer">Rapid spatio-temporal flood prediction and uncertainty quantification using a deep learning method</a>. <em>Journal of Hydrology</em>.</li>
+              <li><strong>Guo et al. (2021).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/jfr3.12684" target="_blank" rel="noopener noreferrer">Data‐driven flood emulation: Speeding up urban flood predictions by deep convolutional neural networks</a>. <em>Journal of Flood Risk Management</em>.</li>
+              <li><strong>Zhang et al. (2024).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S2666675824000559" target="_blank" rel="noopener noreferrer">Deep learning for cross-region streamflow and flood forecasting at a global scale</a>. <em>The Innovation</em>.</li>
+              <li><strong>Hostache et al. (2018).</strong> <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1029/2017WR022205" target="_blank" rel="noopener noreferrer">Near‐Real‐Time Assimilation of SAR‐Derived Flood Maps for Improving Flood Forecasts</a>. <em>Water Resources Research</em>.</li>
+              <li><strong>Cohen et al. (2018).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/1752-1688.12609" target="_blank" rel="noopener noreferrer">Estimating Floodwater Depths from Flood Inundation Maps and Topography</a>. <em>JAWRA Journal of the American Water Resources Association</em>.</li>
+              <li><strong>Cao and Choe. (2024).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/risa.14244" target="_blank" rel="noopener noreferrer">Posthurricane damage assessment using satellite imagery and geolocation features</a>. <em>Risk Analysis</em>.</li>
+              <li><strong>Katiyar et al. (2021).</strong> <a href="https://www.mdpi.com/2072-4292/13/12/2334" target="_blank" rel="noopener noreferrer">Near-Real-Time Flood Mapping Using Off-the-Shelf Models with SAR Imagery and Deep Learning</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Wouters et al. (2021).</strong> <a href="https://nhess.copernicus.org/articles/21/3199/2021/" target="_blank" rel="noopener noreferrer">Improving flood damage assessments in data-scarce areas by retrieval of building characteristics through UAV image segmentation and machine learning - a case study of the 2019 floods in southern Malawi</a>. <em>Natural Hazards and Earth System Sciences</em>.</li>
+              <li><strong>Whitehurst et al. (2022).</strong> <a href="https://www.mdpi.com/2072-4292/14/19/4952" target="_blank" rel="noopener noreferrer">Post-Flood Analysis for Damage and Restoration Assessment Using Drone Imagery</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Scotti et al. (2020).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/jfr3.12647" target="_blank" rel="noopener noreferrer">Enhanced flood mapping using synthetic aperture radar (SAR) images, hydraulic modelling, and social media: A case study of Hurricane Harvey (Houston, TX)</a>. <em>Journal of Flood Risk Management</em>.</li>
+              <li><strong>Eudaric et al. (2024).</strong> <a href="https://www.nature.com/articles/s41598-024-69977-1" target="_blank" rel="noopener noreferrer">A satellite imagery-driven framework for rapid resource allocation in flood scenarios to enhance loss and damage fund effectiveness</a>. <em>Scientific Reports</em>.</li>
+              <li><strong>Haselbach et al. (2023).</strong> <a href="https://link.springer.com/10.1007/s11069-023-05921-2" target="_blank" rel="noopener noreferrer">Spatially estimating flooding depths from damage reports</a>. <em>Natural Hazards</em>.</li>
+              <li><strong>Rahnemoonfar et al. (2023).</strong> <a href="https://www.nature.com/articles/s41597-023-02799-4" target="_blank" rel="noopener noreferrer">RescueNet: A High Resolution UAV Semantic Segmentation Dataset for Natural Disaster Damage Assessment</a>. <em>Scientific Data</em>.</li>
+              <li><strong>Porter et al. (2023).</strong> <a href="https://ascelibrary.org/doi/10.1061/NHREFO.NHENG-1543" target="_blank" rel="noopener noreferrer">Estimating Pluvial Depth-Damage Functions for Areas within the United States Using Historical Claims Data</a>. <em>Natural Hazards Review</em>.</li>
+              <li><strong>Zheng et al. (2021).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0034425721003564" target="_blank" rel="noopener noreferrer">Building damage assessment for rapid disaster response with a deep object-based semantic change detection framework: From natural disasters to man-made disasters</a>. <em>Remote Sensing of Environment</em>.</li>
+              <li><strong>Sarkar et al. (2023).</strong> <a href="https://ieeexplore.ieee.org/document/10124393/" target="_blank" rel="noopener noreferrer">SAM-VQA: Supervised Attention-Based Visual Question Answering Model for Post-Disaster Damage Assessment on Remote Sensing Imagery</a>. <em>IEEE Transactions on Geoscience and Remote Sensing</em>.</li>
+              <li><strong>Nguyen et al. (2017).</strong> <a href="https://dl.acm.org/doi/10.1145/3110025.3110109" target="_blank" rel="noopener noreferrer">Damage Assessment from Social Media Imagery Data During Disasters</a>. <em>Proceedings of the 2017 IEEE/ACM International Conference on Advances in Social Networks Analysis and Mining 2017</em>.</li>
+              <li><strong>Adriano et al. (2021).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0924271621000575" target="_blank" rel="noopener noreferrer">Learning from multimodal and multitemporal earth observation data for building damage mapping</a>. <em>ISPRS Journal of Photogrammetry and Remote Sensing</em>.</li>
+              <li><strong>Deng and Wang. (2022).</strong> <a href="https://www.nature.com/articles/s41598-022-20114-w" target="_blank" rel="noopener noreferrer">Post-disaster building damage assessment based on improved U-Net</a>. <em>Scientific Reports</em>.</li>
+              <li><strong>Bai et al. (2020).</strong> <a href="https://www.mdpi.com/2072-4292/12/24/4055" target="_blank" rel="noopener noreferrer">Pyramid Pooling Module-Based Semi-Siamese Network: A Benchmark Model for Assessing Building Damage from xBD Satellite Imagery Datasets</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Tilon et al. (2020).</strong> <a href="https://www.mdpi.com/2072-4292/12/24/4193" target="_blank" rel="noopener noreferrer">Post-Disaster Building Damage Detection from Earth Observation Imagery Using Unsupervised and Transferable Anomaly Detecting Generative Adversarial Networks</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Dasgupta et al. (2018).</strong> <a href="https://agupubs.onlinelibrary.wiley.com/doi/10.1002/9781119217886.ch4" target="_blank" rel="noopener noreferrer">Flood Mapping Using Synthetic Aperture Radar Sensors From Local to Global Scales</a>. <em>Geophysical Monograph Series</em>.</li>
+              <li><strong>Grimaldi et al. (2020).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0034425719306029" target="_blank" rel="noopener noreferrer">Flood mapping under vegetation using single SAR acquisitions</a>. <em>Remote Sensing of Environment</em>.</li>
+              <li><strong>Cian et al. (2018).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0034425718300993" target="_blank" rel="noopener noreferrer">Normalized Difference Flood Index for rapid flood mapping: Taking advantage of EO big data</a>. <em>Remote Sensing of Environment</em>.</li>
+              <li><strong>Shen et al. (2019).</strong> <a href="https://linkinghub.elsevier.com/retrieve/pii/S0034425718305169" target="_blank" rel="noopener noreferrer">Near-real-time non-obstructed flood inundation mapping using synthetic aperture radar</a>. <em>Remote Sensing of Environment</em>.</li>
+              <li><strong>Ivan Ulloa et al. (2020).</strong> <a href="https://www.mdpi.com/2072-4292/12/9/1384" target="_blank" rel="noopener noreferrer">Flood Proxy Mapping with Normalized Difference Sigma-Naught Index and Shannon&#39;s Entropy</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Clement et al. (2018).</strong> <a href="https://onlinelibrary.wiley.com/doi/10.1111/jfr3.12303" target="_blank" rel="noopener noreferrer">Multi‐temporal synthetic aperture radar flood mapping using change detection</a>. <em>Journal of Flood Risk Management</em>.</li>
+              <li><strong>Di Mauro et al. (2021).</strong> <a href="https://hess.copernicus.org/articles/25/4081/2021/" target="_blank" rel="noopener noreferrer">Assimilation of probabilistic flood maps from SAR data into a coupled hydrologic-hydraulic forecasting model: a proof of concept</a>. <em>Hydrology and Earth System Sciences</em>.</li>
+              <li><strong>Giustarini et al. (2016).</strong> <a href="http://ieeexplore.ieee.org/document/7548327/" target="_blank" rel="noopener noreferrer">Probabilistic Flood Mapping Using Synthetic Aperture Radar Data</a>. <em>IEEE Transactions on Geoscience and Remote Sensing</em>.</li>
+              <li><strong>Kryvasheyeu et al. (2016).</strong> <a href="https://www.science.org/doi/10.1126/sciadv.1500779" target="_blank" rel="noopener noreferrer">Rapid assessment of disaster damage using social media activity</a>. <em>Science Advances</em>.</li>
+              <li><strong>Imran et al. (2020).</strong> <a href="https://arxiv.org/abs/2004.06675" target="_blank" rel="noopener noreferrer">Rapid Damage Assessment Using Social Media Images by Combining Human and Machine Intelligence</a>. <em>arXiv</em>.</li>
+              <li><strong>Jim&#233;nez-Jim&#233;nez et al. (2020).</strong> <a href="https://www.tandfonline.com/doi/full/10.1080/19475705.2020.1760360" target="_blank" rel="noopener noreferrer">Rapid urban flood damage assessment using high resolution remote sensing data and an object-based approach</a>. <em>Geomatics, Natural Hazards and Risk</em>.</li>
+              <li><strong>Wu et al. (2023).</strong> <a href="https://www.mdpi.com/2072-4292/15/8/2046" target="_blank" rel="noopener noreferrer">A Near-Real-Time Flood Detection Method Based on Deep Learning and SAR Images</a>. <em>Remote Sensing</em>.</li>
+              <li><strong>Liu et al. (2025).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S2666790825000151" target="_blank" rel="noopener noreferrer">Multi-criteria decision-making method for emergency shelter site selection considering flood risk: A case study of Zhuhai, China</a>. <em>Cleaner Engineering and Technology</em>.</li>
+              <li><strong>Liu et al. (2025).</strong> <a href="https://doi.org/10.1007/s13753-025-00639-0" target="_blank" rel="noopener noreferrer">A Comprehensive Review of Machine Learning Approaches for Flood Depth Estimation</a>. <em>International Journal of Disaster Risk Science</em>.</li>
+              <li><strong>Bout et al. (2022).</strong> <a href="https://eartharxiv.org/repository/view/4777/" target="_blank" rel="noopener noreferrer">A breakthrough in fast flood simulation</a>. <em>EarthArXiv</em>.</li>
+              <li><strong>No author. (n.d.).</strong> <a href="https://fastflood.org/" target="_blank" rel="noopener noreferrer">Fast Flood App</a>.</li>
+              <li><strong>Zhou. (n.d.).</strong> <a href="https://ieee-dataport.org/documents/multi-weather-vehicle-dataset-camouflage-generation" target="_blank" rel="noopener noreferrer">Multi-weather vehicle dataset for camouflage generation</a>. <em>IEEE DataPort</em>.</li>
+              <li><strong>A. KENK and Hassaballah. (2020).</strong> <a href="https://ieee-dataport.org/documents/dawn-vehicle-detection-dataset-adverse-weather-nature" target="_blank" rel="noopener noreferrer">DAWN: Vehicle Detection Dataset in Adverse Weather Nature</a>. <em>IEEE DataPort</em>.</li>
+              <li><strong>Zaman et al. (2023).</strong> <a href="https://ieeexplore.ieee.org/document/10187020" target="_blank" rel="noopener noreferrer">Deep Learning Approaches for Vehicle and Pedestrian Detection in Adverse Weather</a>. <em>2023 IEEE Transportation Electrification Conference &amp; Expo (ITEC)</em>.</li>
+              <li><strong>Rambour. (2020).</strong> <a href="https://ieee-dataport.org/open-access/sen12-flood" target="_blank" rel="noopener noreferrer">SEN12-FLOOD</a>. <em>IEEE DataPort</em>.</li>
+              <li><strong>Yu et al. (2025).</strong> <a href="https://doi.org/10.1080/17538947.2025.2495738" target="_blank" rel="noopener noreferrer">Data quality and uncertainty issues in flood prediction: a systematic review</a>. <em>International Journal of Digital Earth</em>.</li>
+              <li><strong>Ahmad et al. (n.d.).</strong> Convolutional Neural Networks for Disaster Images Retrieval.</li>
+              <li><strong>He et al. (2023).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S1569843223000195" target="_blank" rel="noopener noreferrer">Cross-modal change detection flood extraction based on convolutional neural network</a>. <em>International Journal of Applied Earth Observation and Geoinformation</em>.</li>
+              <li><strong>Ye et al. (2024).</strong> <a href="https://doi.org/10.1007/s44212-024-00043-x" target="_blank" rel="noopener noreferrer">3D visualization of hurricane storm surge impact on urban infrastructure</a>. <em>Urban Informatics</em>.</li>
+              <li><strong>Zeng et al. (2024).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S0022169424008710" target="_blank" rel="noopener noreferrer">A novel AI-based model for real-time flooding image recognition using super-resolution generative adversarial network</a>. <em>Journal of Hydrology</em>.</li>
+              <li><strong>Immidisetti. (2025).</strong> <a href="https://github.com/irkingmaker/multimodal-flood-classification" target="_blank" rel="noopener noreferrer">irkingmaker/multimodal-flood-classification</a>.</li>
+              <li><strong>Liu et al. (2024).</strong> <a href="https://www.sciencedirect.com/science/article/pii/S002216942401535X" target="_blank" rel="noopener noreferrer">BEW-YOLOv8: A deep learning model for multi-scene and multi-scale flood depth estimation</a>. <em>Journal of Hydrology</em>.</li>
+              <li><strong>Lopez-Fuentes. (n.d.).</strong> Multi-modal Deep Learning Approach for Flood Detection.</li>
             </ul>
+            </details>
           </article>
 
           <article class="reference-card">
-            <h3>Further Reading</h3>
+            <h3>Contact Us</h3>
             <ul class="reference-list">
-              <!-- <li><a href="https://www.undrr.org/" target="_blank" rel="noopener noreferrer">UNDRR</a>: disaster risk reduction terminology, frameworks, and Sendai Framework resources.</li>
-              <li><a href="https://www.earthdata.nasa.gov/learn/trainings" target="_blank" rel="noopener noreferrer">NASA Earthdata Training</a>: applied remote sensing and Earth observation tutorials.</li>
-              <li><a href="https://emergency.copernicus.eu/" target="_blank" rel="noopener noreferrer">Copernicus Emergency Management Service</a>: rapid mapping and disaster-monitoring products.</li> -->
-              <li><a href="https://www.fema.gov/emergency-managers/practitioners/hazus" target="_blank" rel="noopener noreferrer">FEMA Hazus</a>: risk assessment methods and tools for natural hazards.</li>
+              <li><a href="mailto:urban.digitaltwin@ucf.edu">urban.digitaltwin@ucf.edu</a></li>
             </ul>
           </article>
         </div>
@@ -1385,7 +1733,7 @@
           <div class="callout-actions">
             <a href="#curriculum" class="btn btn-primary">Explore Modules</a>
             <a href="#progress" class="btn btn-outline">Track Progress</a>
-            <a data-env="WEEK_01_URL" target="_blank" rel="noopener noreferrer" class="btn btn-outline">Open Week 01 Notebook</a>
+            
           </div>
         </div>
       </div>
@@ -1397,7 +1745,8 @@
 
       <!-- Logos -->
       <div style="display:flex; gap:30px; align-items:center; flex-wrap:wrap;">
-        <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer"><img src="assets/UCF_logo.png" alt="University of Central Florida" style="height:64px; width:auto;"></a>
+        <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer"><img src="assets/UDT_Logo.png" alt="Urban Digital Twin Lab" style="height:64px; width:auto;"></a>
+        <a href="https://www.ucf.edu/" target="_blank" rel="noopener noreferrer"><img src="assets/UCF_logo.png" alt="University of Central Florida" style="height:64px; width:auto;"></a>
         <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer"><img src="assets/smc_logo_with_symbo.webp" alt="IEEE Systems, Man, and Cybernetics Society" style="height:64px; width:auto;"></a>
       </div>
 
@@ -1425,18 +1774,86 @@
     const STORAGE_KEY = 'geoai_progress';
     const TOTAL_WEEKS = 10;
     const MIN_REFLECTION_WORDS = 2;
+    const MAX_QUIZ_ATTEMPTS = 5;
+    const quizBank = {
+      1: {
+        question: 'What type of geospatial data is made of pixels?',
+        answers: ['raster', 'raster data']
+      },
+      2: {
+        question: 'Which open mapping source provides roads, buildings, and places?',
+        answers: ['openstreetmap', 'osm']
+      },
+      3: {
+        question: 'What type of learning uses labeled data?',
+        answers: ['supervised', 'supervised learning']
+      },
+      4: {
+        question: 'What task assigns a class label to each pixel?',
+        answers: ['segmentation', 'semantic segmentation']
+      },
+      5: {
+        question: 'Which object detection model family is commonly used for detecting vehicles?',
+        answers: ['yolo', 'yolov8']
+      },
+      6: {
+        question: 'What elevation dataset is commonly used for flood-depth estimation?',
+        answers: ['dem', 'digital elevation model']
+      },
+      7: {
+        question: 'Which metric balances precision and recall?',
+        answers: ['f1', 'f1 score']
+      },
+      8: {
+        question: 'What type of tool helps translate model outputs into response actions?',
+        answers: ['decision support', 'decision support system']
+      },
+      9: {
+        question: 'A digital twin is a virtual representation of what kind of system?',
+        answers: ['physical', 'physical system', 'real world system']
+      },
+      10: {
+        question: 'What final step checks whether a model performs well?',
+        answers: ['evaluation', 'validation']
+      }
+    };
     let firstIncompleteWeek = null;
 
     function loadData() {
       try {
-        return JSON.parse(localStorage.getItem(STORAGE_KEY)) || {};
+        return enforceSequentialCompletion(JSON.parse(localStorage.getItem(STORAGE_KEY)) || {});
       } catch {
         return {};
       }
     }
 
+    function enforceSequentialCompletion(data) {
+      for (let n = 2; n <= TOTAL_WEEKS; n++) {
+        const previous = data['week_' + (n - 1)];
+        if (!previous || !previous.done) {
+          clearFollowingCompletion(data, n - 1);
+          break;
+        }
+      }
+      return data;
+    }
+
     function saveData(data) {
       localStorage.setItem(STORAGE_KEY, JSON.stringify(data));
+    }
+
+    function isWeekUnlocked(n, data = loadData()) {
+      return n === 1 || Boolean(data['week_' + (n - 1)] && data['week_' + (n - 1)].done);
+    }
+
+    function lockedMessage(n) {
+      return 'Complete Week ' + (n - 1) + ' first';
+    }
+
+    function clearFollowingCompletion(data, n) {
+      for (let i = n + 1; i <= TOTAL_WEEKS; i++) {
+        if (data['week_' + i]) data['week_' + i].done = false;
+      }
     }
 
     function copyCitation() {
@@ -1463,21 +1880,44 @@
 
     function toggleWeek(n) {
       const data = loadData();
+      if (!isWeekUnlocked(n, data)) {
+        flashSaved(n, lockedMessage(n), true);
+        return;
+      }
+
       const notesEl = document.getElementById('notes-' + n);
+      const quizEl = document.getElementById('quiz-' + n);
       const notes = notesEl.value.trim();
+      const quizAnswer = quizEl ? quizEl.value.trim() : '';
       data['week_' + n] = data['week_' + n] || {};
 
       if (!data['week_' + n].done && countWords(notes) < MIN_REFLECTION_WORDS) {
         notesEl.focus();
-        flashSaved(n, 'Add at least 2 words first', true);
+        flashSaved(n, 'Add reflection first', true);
+        return;
+      }
+
+      if (!data['week_' + n].done && !isQuizCorrect(n)) {
+        showQuiz(n);
+        if (quizEl) quizEl.focus();
+
+        if (!quizAnswer) {
+          flashSaved(n, 'Answer knowledge check first', true);
+          return;
+        }
+
+        const attempts = recordQuizAttempt(n);
+        flashSaved(n, attempts >= MAX_QUIZ_ATTEMPTS ? 'Answer shown below' : 'Answer knowledge check correctly', true);
         return;
       }
 
       data['week_' + n].notes = notesEl.value;
+      data['week_' + n].quiz = quizEl ? quizEl.value : '';
       data['week_' + n].done = !data['week_' + n].done;
       const completed = data['week_' + n].done;
+      if (!completed) clearFollowingCompletion(data, n);
       saveData(data);
-      renderCard(n, data['week_' + n]);
+      renderAllCards(data);
       updateOverview(data);
       flashSaved(n, 'Saved ✓');
 
@@ -1491,21 +1931,112 @@
 
     function saveNotes(n) {
       const data = loadData();
+      if (!isWeekUnlocked(n, data)) return;
+
       data['week_' + n] = data['week_' + n] || {};
       data['week_' + n].notes = document.getElementById('notes-' + n).value;
       if (countWords(data['week_' + n].notes) < MIN_REFLECTION_WORDS && data['week_' + n].done) {
         data['week_' + n].done = false;
-        renderCard(n, data['week_' + n]);
+        clearFollowingCompletion(data, n);
+        saveData(data);
+        renderAllCards(data);
         updateOverview(data);
         flashSaved(n, 'Minimum 2 words', true);
       } else {
+        saveData(data);
         flashSaved(n, 'Saved ✓');
       }
-      saveData(data);
     }
 
     function countWords(value) {
       return value.trim().split(/\s+/).filter(Boolean).length;
+    }
+
+    function normalizeQuizAnswer(value) {
+      return value.trim().toLowerCase().replace(/[-_]/g, ' ').replace(/\s+/g, ' ');
+    }
+
+    function isQuizCorrect(n) {
+      const input = document.getElementById('quiz-' + n);
+      if (!input || !quizBank[n]) return false;
+      const value = normalizeQuizAnswer(input.value);
+      return quizBank[n].answers.includes(value);
+    }
+
+    function showQuiz(n) {
+      const data = loadData();
+      if (!isWeekUnlocked(n, data)) {
+        flashSaved(n, lockedMessage(n), true);
+        return;
+      }
+
+      const area = document.getElementById('quiz-area-' + n);
+      const question = document.getElementById('question-' + n);
+      const input = document.getElementById('quiz-' + n);
+      if (!area || !question || !quizBank[n]) return;
+
+      question.textContent = quizBank[n].question;
+      area.style.display = 'block';
+      updateQuizFeedback(n);
+      if (input) input.focus();
+    }
+
+    function saveQuiz(n) {
+      const data = loadData();
+      if (!isWeekUnlocked(n, data)) return;
+
+      const input = document.getElementById('quiz-' + n);
+      data['week_' + n] = data['week_' + n] || {};
+      data['week_' + n].quiz = input ? input.value : '';
+      if (data['week_' + n].done && !isQuizCorrect(n)) {
+        data['week_' + n].done = false;
+        clearFollowingCompletion(data, n);
+        saveData(data);
+        renderAllCards(data);
+        updateOverview(data);
+        flashSaved(n, 'Knowledge check required', true);
+        updateQuizFeedback(n);
+        return;
+      }
+      saveData(data);
+      updateQuizFeedback(n);
+    }
+
+    function quizAttempts(n) {
+      const data = loadData();
+      return data['week_' + n] && data['week_' + n].quizAttempts ? data['week_' + n].quizAttempts : 0;
+    }
+
+    function recordQuizAttempt(n) {
+      const data = loadData();
+      data['week_' + n] = data['week_' + n] || {};
+      data['week_' + n].quizAttempts = (data['week_' + n].quizAttempts || 0) + 1;
+      saveData(data);
+      updateQuizFeedback(n);
+      return data['week_' + n].quizAttempts;
+    }
+
+    function updateQuizFeedback(n) {
+      const feedback = document.getElementById('quiz-feedback-' + n);
+      if (!feedback || !quizBank[n]) return;
+
+      feedback.classList.remove('correct', 'error');
+      if (isQuizCorrect(n)) {
+        feedback.textContent = 'Correct. You can mark this week complete.';
+        feedback.classList.add('correct');
+        return;
+      }
+
+      const attempts = quizAttempts(n);
+      if (attempts >= MAX_QUIZ_ATTEMPTS) {
+        feedback.textContent = 'Expected answers: ' + quizBank[n].answers.join(' or ');
+        feedback.classList.add('error');
+      } else if (attempts > 0) {
+        feedback.textContent = (MAX_QUIZ_ATTEMPTS - attempts) + ' attempts before the answer appears.';
+        feedback.classList.add('error');
+      } else {
+        feedback.textContent = '';
+      }
     }
 
     function flashSaved(n, message = 'Saved ✓', isError = false) {
@@ -1521,18 +2052,41 @@
     }
 
     function renderCard(n, weekData) {
+      const data = loadData();
       const card = document.getElementById('card-' + n);
       const toggle = document.getElementById('toggle-' + n);
       const notes = document.getElementById('notes-' + n);
+      const quiz = document.getElementById('quiz-' + n);
+      const question = document.getElementById('question-' + n);
+      const quizBtn = card ? card.querySelector('.quiz-btn') : null;
+      const weekLink = card ? card.querySelector('.wk-link') : null;
+      const check = card ? card.querySelector('.wk-check') : null;
       const done = weekData && weekData.done;
+      const locked = !isWeekUnlocked(n, data);
       if (done) {
         card.classList.add('done');
         toggle.textContent = '✓ Completed';
       } else {
         card.classList.remove('done');
-        toggle.textContent = 'Mark as Complete';
+        toggle.textContent = locked ? 'Locked' : 'Mark as Complete';
       }
+      card.classList.toggle('locked', locked);
       notes.value = weekData && weekData.notes ? weekData.notes : '';
+      notes.disabled = locked;
+      if (quiz) quiz.value = weekData && weekData.quiz ? weekData.quiz : '';
+      if (quiz) quiz.disabled = locked;
+      if (quizBtn) quizBtn.disabled = locked;
+      if (check) check.setAttribute('aria-disabled', locked ? 'true' : 'false');
+      if (weekLink) {
+        weekLink.setAttribute('aria-disabled', locked ? 'true' : 'false');
+        weekLink.tabIndex = locked ? -1 : 0;
+      }
+      if (question && quizBank[n]) question.textContent = quizBank[n].question;
+      updateQuizFeedback(n);
+    }
+
+    function renderAllCards(data = loadData()) {
+      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {});
     }
 
     function updateOverview(data) {
@@ -1580,7 +2134,7 @@
     function resetAll() {
       if (!confirm('Reset all progress and notes? This cannot be undone.')) return;
       localStorage.removeItem(STORAGE_KEY);
-      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, {});
+      renderAllCards({});
       updateOverview({});
       const banner = document.getElementById('resumeBanner');
       if (banner) banner.style.display = 'none';
@@ -1588,7 +2142,7 @@
 
     (function initProgress() {
       const data = loadData();
-      for (let n = 1; n <= TOTAL_WEEKS; n++) renderCard(n, data['week_' + n] || {});
+      renderAllCards(data);
       updateOverview(data);
     })();
   </script>
