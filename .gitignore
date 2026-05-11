@@ -26,6 +26,8 @@ Website/.env.*
 Website/links*.json
 Website/links*.js
 Website/local-links.*
+completion-code.*
+certificate-code.*
 
 # Editor and OS noise
 .vscode/settings.json

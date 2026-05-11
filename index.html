@@ -437,14 +437,11 @@
       list-style: none;
     }
     .outcomes-list li {
+      position: relative;
       border: 1px solid var(--border);
       background: var(--white);
       border-radius: 16px;
-      padding: 1rem 1.1rem;
-      display: grid;
-      grid-template-columns: 34px 1fr;
-      gap: .85rem;
-      align-items: start;
+      padding: 1rem 1.1rem 1rem 4.1rem;
       color: var(--muted);
       font-size: .9rem;
       line-height: 1.5;
@@ -463,6 +460,14 @@
       font-size: .72rem;
       font-weight: 900;
       line-height: 1;
+      position: absolute;
+      top: 1rem;
+      left: 1.1rem;
+    }
+    .outcomes-list li strong {
+      color: #425b7c;
+      display: inline;
+      margin-right: .2rem;
     }
 
     .survey-grid, .research-grid {
@@ -810,36 +815,127 @@
       cursor: pointer;
     }
     .complete-banner {
-      display: none;
-      background: linear-gradient(135deg, #052e16, #166534);
-      color: #fff;
+      display: block;
+      background: var(--white);
+      color: var(--text);
+      border: 1px solid var(--border);
       border-radius: 20px;
       padding: 1.8rem 2rem;
       margin-top: 2rem;
       text-align: center;
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .05);
     }
-    .complete-banner.visible { display: block; }
-    .complete-banner h2 {
+    .complete-banner.visible {
+      background: linear-gradient(135deg, #052e16, #166534);
       color: #fff;
+      border-color: transparent;
+      box-shadow: none;
+    }
+    .complete-banner h2 {
+      color: var(--navy);
       font-size: 1.5rem;
       margin-bottom: .4rem;
     }
+    .complete-banner.visible h2 { color: #fff; }
     .complete-banner p {
-      color: rgba(255,255,255,.75);
+      color: var(--muted);
       font-size: .9rem;
       margin-bottom: 1rem;
     }
+    .complete-banner.visible p { color: rgba(255,255,255,.75); }
     .btn-cert {
       display: inline-flex;
       align-items: center;
+      justify-content: center;
       gap: .4rem;
       background: var(--gold);
       color: var(--navy);
+      border: 0;
       border-radius: 99px;
       padding: .75rem 1.6rem;
       font-size: .9rem;
       font-weight: 800;
       text-decoration: none;
+      cursor: pointer;
+    }
+    .certificate-form {
+      display: grid;
+      gap: .75rem;
+      max-width: 460px;
+      margin: 1rem auto 0;
+    }
+    .certificate-form .notes-box {
+      min-height: 0;
+      background: rgba(255,255,255,.96);
+      text-align: center;
+    }
+    .certificate-form .notes-box:disabled {
+      background: #eef4fa;
+      color: var(--muted);
+      cursor: not-allowed;
+    }
+    .btn-cert:disabled,
+    .btn-cert.disabled {
+      opacity: .58;
+      cursor: not-allowed;
+      transform: none;
+    }
+    .btn-cert.disabled {
+      pointer-events: none;
+    }
+    .certificate-page {
+      display: none;
+    }
+    .certificate {
+      width: 11in;
+      min-height: 8.5in;
+      padding: .7in;
+      margin: 0 auto;
+      text-align: center;
+      border: 10px solid var(--navy);
+      background: var(--white);
+      color: var(--navy);
+    }
+    .certificate-logo {
+      height: 90px;
+      width: auto;
+      margin-bottom: 1.2rem;
+    }
+    .certificate h1 {
+      color: var(--navy);
+      font-size: 2.6rem;
+      margin-bottom: 1.2rem;
+    }
+    .certificate h2 {
+      font-size: 2.2rem;
+      color: var(--blue);
+      margin: 1rem 0;
+      border-bottom: 2px solid var(--gold);
+      display: inline-block;
+      padding: 0 1.5rem .4rem;
+    }
+    .certificate h3 {
+      color: var(--navy);
+      font-size: 1.7rem;
+      margin: 1rem 0;
+    }
+    .certificate-text {
+      font-size: 1.1rem;
+      color: var(--text);
+    }
+    .certificate-small {
+      max-width: 760px;
+      margin: 1.3rem auto;
+      color: var(--muted);
+      font-size: .95rem;
+    }
+    .certificate-footer {
+      display: flex;
+      justify-content: space-between;
+      gap: 2rem;
+      margin-top: 2.5rem;
+      font-size: .95rem;
+      text-align: left;
     }
     .progress-weeks-grid {
       display: grid;
@@ -1127,6 +1223,27 @@
       .week-num { width: 52px; height: 52px; border-radius: 16px; }
       .overview-card { grid-template-columns: 1fr; }
     }
+    @media print {
+      body * {
+        visibility: hidden;
+      }
+      #certificatePage,
+      #certificatePage * {
+        visibility: visible;
+      }
+      #certificatePage {
+        display: block;
+        position: absolute;
+        left: 0;
+        top: 0;
+        width: 100%;
+        padding: 0;
+      }
+      @page {
+        size: landscape;
+        margin: .35in;
+      }
+    }
   </style>
 </head>
 
@@ -1301,16 +1418,11 @@
         </div>
 
         <ul class="outcomes-list">
-          <li>Identify and work with foundational geospatial datasets used in disaster management, including raster data, vector layers, satellite imagery, DEMs, and open disaster datasets.</li>
-          <li>Visualize and preprocess geospatial disaster data using Python workflows for analysis-ready modeling.</li>
-          <li>Apply machine learning and computer vision techniques to disaster-related geospatial problems.</li>
-          <li>Develop segmentation workflows for flood and surface water detection using remote sensing imagery.</li>
-          <li>Build multimodal flood detection pipelines using vehicle imagery and urban sensing approaches.</li>
-          <li>Estimate urban flood depth using AI-assisted geospatial workflows and supporting terrain/contextual datasets.</li>
-          <li>Evaluate model performance and interpret failure cases using appropriate validation metrics.</li>
-          <li>Translate GeoAI outputs into disaster-response decision support systems for operational planning.</li>
-          <li>Integrate GeoAI outputs into urban digital twin frameworks for resilience and preparedness.</li>
-          <li>Design and present an end-to-end disaster analytics project using open-source GeoAI workflows.</li>
+          <li><strong>Geospatial Disaster Data Foundations:</strong> Identify, access, preprocess, and visualize geospatial datasets used in disaster management, including raster data, vector layers, satellite imagery, DEMs, and open-source disaster datasets.</li>
+          <li><strong>GeoAI and Computer Vision Application:</strong> Apply machine learning, computer vision, and segmentation methods to disaster-related geospatial problems such as flood detection, surface-water mapping, and urban damage assessment.</li>
+          <li><strong>Multimodal Flood Intelligence Workflows:</strong> Integrate multiple data sources, including remote sensing, terrain data, street-level imagery, and contextual urban information, to support flood detection and flood-depth estimation workflows.</li>
+          <li><strong>Model Evaluation and Decision Support:</strong> Evaluate GeoAI model outputs, interpret uncertainty and failure cases, and translate results into decision-support products for disaster response and planning.</li>
+          <li><strong>Digital Twin Integration and Project Synthesis:</strong> Connect GeoAI outputs with urban digital twin concepts and design an end-to-end, reproducible disaster analytics project using open-source workflows.</li>
         </ul>
       </div>
     </section>
@@ -1408,11 +1520,6 @@
           </div>
         </div>
 
-        <div class="complete-banner" id="completeBanner">
-          <h2>Course Complete</h2>
-          <p>You have finished all 10 weeks of GeoAI for Disaster Management.</p>
-          <a href="#surveys" class="btn-cert">Take Post-Course Survey</a>
-        </div>
         <div class="notebooks-heading">
           <div class="eyebrow">Notebooks</div>
         </div>
@@ -1607,6 +1714,17 @@
             <div class="complete-row"><div class="toggle-btn" onclick="toggleWeek(10)" id="toggle-10">Mark as Complete</div><span class="saved-indicator" id="saved-10">Saved ✓</span></div>
           </article>
         </div>
+
+        <div class="complete-banner" id="completeBanner">
+          <h2>Certificate</h2>
+          <p id="certificateStatus">Complete all 10 weeks to unlock the certificate.</p>
+          <a href="#surveys" class="btn-cert disabled" id="postSurveyLink" aria-disabled="true">Take Post-Course Survey</a>
+          <div class="certificate-form">
+            <input id="certificateName" placeholder="Enter your name" class="notes-box" disabled>
+            <input id="completionCode" placeholder="Enter completion code from post-course survey" class="notes-box" disabled>
+            <button class="btn-cert" id="printCertificateBtn" type="button" onclick="printCertificate()" disabled>Print Certificate</button>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -1615,7 +1733,7 @@
         <div class="section-head">
           <div>
             <div class="eyebrow">Course Resources</div>
-            <h2>Cite this course and continue reading.</h2>
+            <h2>Cite this course.</h2>
             <p class="section-sub">
               Use the course citation for reports, presentations, and projects. The references below support the course themes in GeoAI, remote sensing, disaster analytics, and digital twins.
             </p>
@@ -1749,6 +1867,37 @@
         </div>
       </div>
     </section>
+
+    <section id="certificatePage" class="certificate-page" aria-hidden="true">
+      <div class="certificate">
+        <img src="assets/UDT_Logo.png" alt="Urban Digital Twin Lab Logo" class="certificate-logo">
+
+        <h1>Certificate of Completion</h1>
+
+        <p class="certificate-text">This certifies that</p>
+
+        <h2 id="certName">Learner Name</h2>
+
+        <p class="certificate-text">
+          has successfully completed the 10-week open course
+        </p>
+
+        <h3>GeoAI for Disaster Management</h3>
+
+        <p class="certificate-small">
+          Covering geospatial disaster data, GeoAI, computer vision, flood intelligence,
+          decision support, and urban digital twin integration.
+        </p>
+
+        <div class="certificate-footer">
+          <div>
+            <strong>Urban Digital Twin Lab</strong><br>
+            University of Central Florida
+          </div>
+          <div id="certDate"></div>
+        </div>
+      </div>
+    </section>
   </main>
 
   <footer>
@@ -1765,7 +1914,7 @@
       <div>
         <strong>GeoAI for Disaster Management</strong><br>
         Developed under <a href="https://simulation.ucf.edu/UDT/" target="_blank" rel="noopener noreferrer">Urban Digital Twin Lab, University of Central Florida</a><br>
-        In association with <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">IEEE Systems, Man, and Cybernetics Society</a>
+        Sponsored by <a href="https://www.ieeesmc.org/" target="_blank" rel="noopener noreferrer">The 2024 IEEE Systems, Man, and Cybernetics (SMC) Society TEAM (Technical Committee Enabling Action Modelling) grant.</a>
       </div>
 
       <!-- Links -->
@@ -1786,6 +1935,7 @@
     const TOTAL_WEEKS = 10;
     const MIN_REFLECTION_WORDS = 2;
     const MAX_QUIZ_ATTEMPTS = 5;
+    const CERTIFICATE_CODE = 'UDT-GEOAI-2026';
     const quizBank = {
       1: {
         question: 'What type of geospatial data is made of pixels?',
@@ -2117,8 +2267,69 @@
       document.getElementById('pctDone').textContent = pct + '%';
       document.getElementById('barFill').style.width = pct + '%';
       document.getElementById('barLabel').textContent = done + ' of ' + TOTAL_WEEKS + ' weeks';
-      document.getElementById('completeBanner').classList.toggle('visible', done === TOTAL_WEEKS);
+      const completed = done === TOTAL_WEEKS;
+      document.getElementById('completeBanner').classList.toggle('visible', completed);
+      updateCertificatePanel(done, completed);
       updateResumeBanner(data, done);
+    }
+
+    function updateCertificatePanel(done, completed) {
+      const status = document.getElementById('certificateStatus');
+      const postSurveyLink = document.getElementById('postSurveyLink');
+      const nameInput = document.getElementById('certificateName');
+      const codeInput = document.getElementById('completionCode');
+      const printButton = document.getElementById('printCertificateBtn');
+
+      if (status) {
+        status.textContent = completed
+          ? 'You have finished all 10 weeks. Complete the post-course survey, enter the code, and print your certificate.'
+          : 'Complete ' + (TOTAL_WEEKS - done) + ' more week' + (TOTAL_WEEKS - done === 1 ? '' : 's') + ' to unlock the certificate.';
+      }
+
+      if (postSurveyLink) {
+        postSurveyLink.classList.toggle('disabled', !completed);
+        postSurveyLink.setAttribute('aria-disabled', completed ? 'false' : 'true');
+        postSurveyLink.tabIndex = completed ? 0 : -1;
+      }
+
+      [nameInput, codeInput, printButton].forEach(el => {
+        if (el) el.disabled = !completed;
+      });
+    }
+
+    function allWeeksCompleted() {
+      const data = loadData();
+      const done = Object.values(data).filter(w => w && w.done).length;
+      return done === TOTAL_WEEKS;
+    }
+
+    function printCertificate() {
+      if (!allWeeksCompleted()) {
+        alert('Please complete all 10 modules before printing the certificate.');
+        return;
+      }
+
+      const codeInput = document.getElementById('completionCode');
+      const code = codeInput ? codeInput.value.trim() : '';
+      if (code !== CERTIFICATE_CODE) {
+        alert('Please enter the valid completion code from the post-course survey.');
+        if (codeInput) codeInput.focus();
+        return;
+      }
+
+      const nameInput = document.getElementById('certificateName');
+      const name = nameInput ? nameInput.value.trim() : '';
+      if (!name) {
+        alert('Please enter your name before printing the certificate.');
+        if (nameInput) nameInput.focus();
+        return;
+      }
+
+      document.getElementById('certName').textContent = name;
+      document.getElementById('certDate').textContent =
+        'Completed on ' + new Date().toLocaleDateString();
+
+      window.print();
     }
 
     function updateResumeBanner(data, done) {
