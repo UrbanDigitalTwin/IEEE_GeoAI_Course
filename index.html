@@ -16,7 +16,6 @@
   <script>
     (function() {
       const FALLBACK = {
-        REPO_URL: "https://github.com/Phani-Raja-Bharath/IEEE_GeoAI_Course",
         PRE_SURVEY_URL: "https://ucf.qualtrics.com/jfe/form/SV_bPd70rUEGIMWuc6",
         POST_SURVEY_URL: "https://ucf.qualtrics.com/jfe/form/SV_cGTJmL4J9pcR37w",
         WEEK_01_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_01/week01_course_setup_and_geoai_intro.ipynb",
@@ -517,7 +516,7 @@
       grid-template-columns: repeat(2, 1fr);
       gap: 1rem;
     }
-    .week-card {
+    .timeline .week-card {
       position: relative;
       display: grid;
       grid-template-columns: 64px 1fr;
@@ -527,12 +526,7 @@
       border: 1px solid var(--border);
       border-radius: 20px;
       text-decoration: none;
-      transition: transform .18s ease, box-shadow .18s ease, border-color .18s ease;
-    }
-    .week-card:hover {
-      border-color: var(--sky);
-      box-shadow: 0 16px 32px rgba(23,105,170,.12);
-      transform: translateY(-3px);
+      box-shadow: 0 10px 24px rgba(15, 23, 42, .04);
     }
     .week-num {
       width: 64px;
@@ -545,12 +539,47 @@
       font-weight: 900;
       font-size: .9rem;
     }
-    .week-card h3 {
+    .timeline .week-card h3 {
       color: var(--navy);
       font-size: 1rem;
       margin-bottom: .25rem;
     }
-    .week-card p { color: var(--muted); font-size: .88rem; }
+    .timeline .week-card p { color: var(--muted); font-size: .88rem; }
+    .week-details {
+      margin-top: .65rem;
+    }
+    .week-details summary {
+      display: inline-flex;
+      align-items: center;
+      gap: .35rem;
+      color: var(--blue);
+      cursor: pointer;
+      font-size: .82rem;
+      font-weight: 800;
+      list-style: none;
+    }
+    .week-details summary::-webkit-details-marker {
+      display: none;
+    }
+    .week-details summary::after {
+      content: "+";
+      display: inline-grid;
+      place-items: center;
+      width: 18px;
+      height: 18px;
+      border: 1px solid #b9dbf6;
+      border-radius: 50%;
+      background: #e7f3ff;
+      font-size: .8rem;
+      line-height: 1;
+    }
+    .week-details[open] summary::after {
+      content: "-";
+    }
+    .week-details p {
+      margin-top: .45rem;
+      line-height: 1.55;
+    }
 
     .research-card {
       background: linear-gradient(135deg, var(--navy), var(--navy-2));
@@ -1219,7 +1248,7 @@
       .btn { width: 100%; }
       .stats, .cards, .survey-grid, .research-grid, .timeline { grid-template-columns: 1fr; }
       .section-head { display: block; }
-      .week-card { grid-template-columns: 52px 1fr; }
+      .timeline .week-card { grid-template-columns: 52px 1fr; }
       .week-num { width: 52px; height: 52px; border-radius: 16px; }
       .overview-card { grid-template-columns: 1fr; }
     }
@@ -1275,7 +1304,6 @@
         <a href="#curriculum">Curriculum</a>
         <a href="#progress">My Progress</a>
         <a href="#resources">Cite</a>
-        <a href="https://github.com/Phani-Raja-Bharath/IEEE_GeoAI_Course" data-env="REPO_URL" target="_blank" rel="noopener noreferrer">GitHub</a>
       </nav>
     </div>
   </header>
@@ -1443,34 +1471,34 @@
 
         <div class="timeline">
           <article class="week-card">
-            <div class="week-num">W01</div><div><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p></div>
+            <div class="week-num">W01</div><div><h3>Introduction to GeoAI</h3><p>Course overview, Python setup, and geospatial data fundamentals.</p><details class="week-details"><summary>Read more</summary><p>Set up the learning environment, review the role of GeoAI in disaster management, and practice working with core geospatial data types.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W02</div><div><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p></div>
+            <div class="week-num">W02</div><div><h3>Disaster Data Sources & Visualization</h3><p>Explore open disaster datasets, geospatial visualization, and data access workflows.</p><details class="week-details"><summary>Read more</summary><p>Learn where disaster, weather, remote sensing, and map data can be found, then build practical visual summaries for analysis.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W03</div><div><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p></div>
+            <div class="week-num">W03</div><div><h3>ML & CV Fundamentals</h3><p>Core machine learning and computer vision concepts for disaster-management tasks.</p><details class="week-details"><summary>Read more</summary><p>Review supervised learning, image features, classification, object detection, and segmentation concepts used throughout the course notebooks.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W04</div><div><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p></div>
+            <div class="week-num">W04</div><div><h3>Surface Water Segmentation</h3><p>Segmentation workflows for detecting surface water and flood extent.</p><details class="week-details"><summary>Read more</summary><p>Apply image segmentation methods to identify water surfaces, compare results, and connect mapped water extent to flood-analysis needs.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W05</div><div><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p></div>
+            <div class="week-num">W05</div><div><h3>Vehicle-Based Flood Detection</h3><p>Computer vision workflows for identifying urban flooding from vehicle-based imagery.</p><details class="week-details"><summary>Read more</summary><p>Use street-level or vehicle-based imagery to recognize visible flood conditions and reason about urban scene interpretation.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W06</div><div><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p></div>
+            <div class="week-num">W06</div><div><h3>Urban Flood Depth Estimation</h3><p>Pipeline design for estimating flood depth in urban environments.</p><details class="week-details"><summary>Read more</summary><p>Combine model outputs, elevation data, and urban context to understand how flood-depth estimation pipelines are assembled.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W07</div><div><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p></div>
+            <div class="week-num">W07</div><div><h3>Model Evaluation & Error Analysis</h3><p>Evaluate model performance, inspect errors, and improve disaster AI workflows.</p><details class="week-details"><summary>Read more</summary><p>Measure performance with appropriate metrics, inspect failure cases, and document uncertainty in disaster-management model outputs.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W08</div><div><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p></div>
+            <div class="week-num">W08</div><div><h3>Disaster Response Decision Support</h3><p>Translate model outputs into decision-support products for response workflows.</p><details class="week-details"><summary>Read more</summary><p>Design outputs that help responders interpret risk, prioritize actions, and communicate geospatial AI findings clearly.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W09</div><div><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p></div>
+            <div class="week-num">W09</div><div><h3>Urban Digital Twin Integration</h3><p>Connect GeoAI outputs with urban digital twin concepts and systems.</p><details class="week-details"><summary>Read more</summary><p>Explore how disaster intelligence can feed urban digital twin workflows for monitoring, simulation, and planning.</p></details></div>
           </article>
           <article class="week-card">
-            <div class="week-num">W10</div><div><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p></div>
+            <div class="week-num">W10</div><div><h3>Final Project Template</h3><p>Complete a final project using the course workflow template.</p><details class="week-details"><summary>Read more</summary><p>Use the final template to frame a problem, document data and methods, evaluate results, and present a complete GeoAI workflow.</p></details></div>
           </article>
         </div>
       </div>
@@ -1921,10 +1949,6 @@
       <div>
         <a href="#curriculum">
           Course Notebooks
-        </a>
-        ·
-        <a data-env="REPO_URL" target="_blank" rel="noopener noreferrer">
-          GitHub Repository
         </a>
       </div>
 
