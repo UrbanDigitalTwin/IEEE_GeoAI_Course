@@ -27,7 +27,8 @@
         WEEK_07_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_07/week07_model_evaluation_and_error_analysis.ipynb",
         WEEK_08_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_08/week08_disaster_response_decision_support.ipynb",
         WEEK_09_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_09/week09_urban_digital_twin_integration.ipynb",
-        WEEK_10_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_10/week10_final_project_template.ipynb"
+        WEEK_10_URL: "https://colab.research.google.com/github/Phani-Raja-Bharath/IEEE_GeoAI_Course/blob/main/Week_10/week10_final_project_template.ipynb",
+        VISITOR_COUNTER_URL: "https://api.counterapi.dev/v1/geoai-disaster/site-visits/up"
       };
 
       function applyEnvLinks(vars) {
@@ -38,12 +39,36 @@
         });
       }
 
+      function loadGoogleAnalytics(vars) {
+        const measurementId = vars.GA_MEASUREMENT_ID;
+        if (!measurementId || measurementId === 'G-XXXXXXXXXX' || window.__GA_LOADED__) return;
+
+        window.__GA_LOADED__ = true;
+        window.dataLayer = window.dataLayer || [];
+        window.gtag = function(){ window.dataLayer.push(arguments); };
+
+        const gaScript = document.createElement('script');
+        gaScript.async = true;
+        gaScript.src = 'https://www.googletagmanager.com/gtag/js?id=' + encodeURIComponent(measurementId);
+        document.head.appendChild(gaScript);
+
+        window.gtag('js', new Date());
+        window.gtag('config', measurementId);
+      }
+
+      function setConfig(vars) {
+        window.__GEOAI_CONFIG__ = vars;
+        loadGoogleAnalytics(vars);
+        document.dispatchEvent(new CustomEvent('geoai:config-ready', { detail: vars }));
+      }
+
       function applyWhenReady(vars) {
         if (document.readyState === 'loading') {
           document.addEventListener('DOMContentLoaded', () => applyEnvLinks(vars));
         } else {
           applyEnvLinks(vars);
         }
+        setConfig(vars);
       }
 
       const script = document.createElement('script');
@@ -1952,8 +1977,36 @@
         </a>
       </div>
 
+      <p style="font-size:0.8rem; color:#9bd2ff; text-align:center; margin-top:1.5rem; opacity:0.85;">
+        Visitors: <span id="visitorCount">&hellip;</span>
+      </p>
+
     </div>
   </footer>
+  <script>
+    (function initVisitorCounter() {
+      const fallbackCounterUrl = 'https://api.counterapi.dev/v1/geoai-disaster/site-visits/up';
+
+      function updateVisitorCount(config = window.__GEOAI_CONFIG__ || {}) {
+        const countEl = document.getElementById('visitorCount');
+        if (!countEl || countEl.dataset.loaded === 'true') return;
+
+        const counterUrl = config.VISITOR_COUNTER_URL || fallbackCounterUrl;
+        countEl.dataset.loaded = 'true';
+
+        fetch(counterUrl)
+          .then(r => r.json())
+          .then(d => { countEl.textContent = d.count; })
+          .catch(() => { countEl.textContent = '-'; });
+      }
+
+      if (window.__GEOAI_CONFIG__) {
+        updateVisitorCount(window.__GEOAI_CONFIG__);
+      } else {
+        document.addEventListener('geoai:config-ready', event => updateVisitorCount(event.detail), { once: true });
+      }
+    })();
+  </script>
   <script>
     const STORAGE_KEY = 'geoai_progress';
     const TOTAL_WEEKS = 10;
