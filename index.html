@@ -1986,18 +1986,46 @@
   <script>
     (function initVisitorCounter() {
       const fallbackCounterUrl = 'https://api.counterapi.dev/v1/geoai-disaster/site-visits/up';
+      const counterStorageKey = 'geoai_visitor_counter_counted';
 
       function updateVisitorCount(config = window.__GEOAI_CONFIG__ || {}) {
         const countEl = document.getElementById('visitorCount');
         if (!countEl || countEl.dataset.loaded === 'true') return;
 
         const counterUrl = config.VISITOR_COUNTER_URL || fallbackCounterUrl;
+        const storedCount = getStoredVisitorCount();
+
         countEl.dataset.loaded = 'true';
+
+        if (storedCount) {
+          countEl.textContent = storedCount;
+          return;
+        }
 
         fetch(counterUrl)
           .then(r => r.json())
-          .then(d => { countEl.textContent = d.count; })
+          .then(d => {
+            countEl.textContent = d.count;
+            storeVisitorCount(d.count);
+          })
           .catch(() => { countEl.textContent = '-'; });
+      }
+
+      function getStoredVisitorCount() {
+        try {
+          return window.localStorage.getItem(counterStorageKey);
+        } catch (error) {
+          return null;
+        }
+      }
+
+      function storeVisitorCount(count) {
+        if (!count) return;
+        try {
+          window.localStorage.setItem(counterStorageKey, String(count));
+        } catch (error) {
+          // Ignore storage failures; the counter still works without caching.
+        }
       }
 
       if (window.__GEOAI_CONFIG__) {
